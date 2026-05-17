@@ -84,7 +84,7 @@ nav{
 [data-theme="light"] .sun{display:inline}[data-theme="light"] .moon{display:none}
 
 /* nav clock */
-.nav-clock-wrap{position:absolute;left:50%;transform:translateX(-50%)}
+.nav-clock-wrap{position:absolute;left:50%;transform:translateX(-50%);z-index:301}
 .nav-clock{
   display:flex;align-items:center;gap:6px;
   padding:5px 14px;border-radius:20px;
@@ -92,6 +92,7 @@ nav{
   cursor:pointer;transition:all .2s;user-select:none;
   font-size:0.78rem;font-weight:700;color:var(--text);
   letter-spacing:.04em;font-family:'Nunito Sans',sans-serif;
+  white-space:nowrap;
 }
 .nav-clock:hover{border-color:var(--blue);background:rgba(37,99,235,.08)}
 .nav-clock-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:istpulse 2s infinite}
@@ -102,10 +103,15 @@ nav{
 
 /* clock panel */
 .clock-panel{
-  display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  display:none;
+  position:fixed;
+  top:64px;
+  left:50%;
+  transform:translateX(-50%);
   background:var(--bg2);border:1px solid var(--border);
-  border-radius:12px;padding:14px 16px;min-width:240px;
-  box-shadow:0 16px 40px rgba(0,0,0,.3);z-index:400;
+  border-radius:12px;padding:14px 16px;min-width:260px;
+  box-shadow:0 16px 40px rgba(0,0,0,.45);
+  z-index:400;
   animation:cpfade .2s ease;
 }
 .clock-panel.open{display:block}
