@@ -424,14 +424,30 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
   .skills-outer{grid-template-columns:1fr}
   .hcard-stats{grid-template-columns:repeat(2,1fr)}
   .footer-top{grid-template-columns:1fr 1fr}
+  .hero-right{order:2}
+  .hero-left{order:1}
 }
 @media(max-width:640px){
+  /* Nav: hide clock on mobile to prevent overlap */
+  .nav-clock-wrap{display:none}
   nav{padding:0 16px}
   .nav-links a:not(.nav-cta){display:none}
   .section{padding:60px 5%}
   .edu-grid,.fl-srv-grid{grid-template-columns:1fr}
   .footer-top{grid-template-columns:1fr}
   .hcard-stats{grid-template-columns:repeat(2,1fr)}
+  /* Hero single col */
+  .hero-two-col{gap:32px}
+  #hero{padding-top:48px;padding-bottom:48px}
+  /* JSON card: compact font */
+  .tcard-body{font-size:0.7rem;line-height:1.75;padding:12px 14px}
+  .tcard-title{font-size:0.62rem}
+  /* Stats row */
+  .hsr-n{font-size:1.3rem}
+  .hsr-l{font-size:0.58rem}
+  /* Buttons full-width stacked */
+  .hero-btns{flex-direction:column;gap:10px}
+  .hero-btns .btn{justify-content:center;width:100%}
 }
 </style>
 </head>
