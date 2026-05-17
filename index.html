@@ -487,10 +487,23 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
       <div class="cp-row">
         <span class="cp-city">🇺🇸 New York</span>
         <span class="cp-time" id="cp-nyc">--:--</span>
-        <span class="cp-tz">EDT</span>
+        <span class="cp-tz">EST / EDT</span>
       </div>
       <div class="cp-row">
-        <span class="cp-city">🇦🇪 Dubai</span>
+        <span class="cp-city">🇺🇸 Chicago</span>
+        <span class="cp-time" id="cp-chi">--:--</span>
+        <span class="cp-tz">CST / CDT</span>
+      </div>
+      <div class="cp-row">
+        <span class="cp-city">🇨🇦 Toronto</span>
+        <span class="cp-time" id="cp-tor">--:--</span>
+        <span class="cp-tz">EST / EDT</span>
+      </div>
+      <div class="cp-row">
+        <span class="cp-city">🇨🇦 Vancouver</span>
+        <span class="cp-time" id="cp-van">--:--</span>
+        <span class="cp-tz">PST / PDT</span>
+      </div>
         <span class="cp-time" id="cp-dxb">--:--</span>
         <span class="cp-tz">GST UTC+4</span>
       </div>
@@ -1036,6 +1049,9 @@ function updateClocks(){
   set('cp-ist','Asia/Kolkata');
   set('cp-lon','Europe/London');
   set('cp-nyc','America/New_York');
+  set('cp-chi','America/Chicago');
+  set('cp-tor','America/Toronto');
+  set('cp-van','America/Vancouver');
   set('cp-dxb','Asia/Dubai');
   set('cp-sgp','Asia/Singapore');
 }
