@@ -105,17 +105,19 @@ nav{
 .clock-panel{
   display:none;
   position:fixed;
-  top:64px;
+  top:68px;
   left:50%;
   transform:translateX(-50%);
-  background:var(--bg2);border:1px solid var(--border);
-  border-radius:12px;padding:14px 16px;min-width:260px;
-  box-shadow:0 16px 40px rgba(0,0,0,.45);
-  z-index:400;
-  animation:cpfade .2s ease;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 16px;
+  min-width:260px;
+  box-shadow:0 16px 48px rgba(0,0,0,.5);
+  z-index:500;
 }
-.clock-panel.open{display:block}
-@keyframes cpfade{from{opacity:0;transform:translateX(-50%) translateY(-6px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.clock-panel.open{display:block;animation:cpfade .2s ease}
+@keyframes cpfade{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 .cp-title{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .cp-row{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border)}
 .cp-row:last-child{border-bottom:none}
@@ -454,7 +456,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
   .footer-top{grid-template-columns:1fr}
   .hcard-stats{grid-template-columns:repeat(2,1fr)}
   .port-grid{grid-template-columns:1fr}
-  .clock-panel{min-width:200px;left:0;transform:none}
   .hero-two-col{gap:28px}
   .tcard{margin-top:16px}
   .srv-grid{grid-template-columns:1fr}
@@ -478,47 +479,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
       <span class="nav-clock-label">IST</span>
       <span class="nav-clock-chevron" id="navClockChevron">▾</span>
     </div>
-    <div class="clock-panel" id="clockPanel">
-      <div class="cp-title">World Clocks</div>
-      <div class="cp-row">
-        <span class="cp-city">🇮🇳 New Delhi</span>
-        <span class="cp-time" id="cp-ist">--:--</span>
-        <span class="cp-tz">IST UTC+5:30</span>
-      </div>
-      <div class="cp-row">
-        <span class="cp-city">🇬🇧 London</span>
-        <span class="cp-time" id="cp-lon">--:--</span>
-        <span class="cp-tz">BST</span>
-      </div>
-      <div class="cp-row">
-        <span class="cp-city">🇺🇸 New York</span>
-        <span class="cp-time" id="cp-nyc">--:--</span>
-        <span class="cp-tz">EST / EDT</span>
-      </div>
-      <div class="cp-row">
-        <span class="cp-city">🇺🇸 Chicago</span>
-        <span class="cp-time" id="cp-chi">--:--</span>
-        <span class="cp-tz">CST / CDT</span>
-      </div>
-      <div class="cp-row">
-        <span class="cp-city">🇨🇦 Toronto</span>
-        <span class="cp-time" id="cp-tor">--:--</span>
-        <span class="cp-tz">EST / EDT</span>
-      </div>
-      <div class="cp-row">
-        <span class="cp-city">🇨🇦 Vancouver</span>
-        <span class="cp-time" id="cp-van">--:--</span>
-        <span class="cp-tz">PST / PDT</span>
-      </div>
-        <span class="cp-time" id="cp-dxb">--:--</span>
-        <span class="cp-tz">GST UTC+4</span>
-      </div>
-      <div class="cp-row">
-        <span class="cp-city">🇸🇬 Singapore</span>
-        <span class="cp-time" id="cp-sgp">--:--</span>
-        <span class="cp-tz">SGT UTC+8</span>
-      </div>
-    </div>
   </div>
 
   <div class="nav-links">
@@ -531,6 +491,19 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
     <button class="theme-btn" onclick="toggleTheme()"><span class="sun">☀️</span><span class="moon">🌙</span></button>
   </div>
 </nav>
+
+<!-- CLOCK PANEL — outside nav so it renders above everything -->
+<div class="clock-panel" id="clockPanel">
+  <div class="cp-title">World Clocks</div>
+  <div class="cp-row"><span class="cp-city">🇮🇳 New Delhi</span><span class="cp-time" id="cp-ist">--:--</span><span class="cp-tz">IST UTC+5:30</span></div>
+  <div class="cp-row"><span class="cp-city">🇬🇧 London</span><span class="cp-time" id="cp-lon">--:--</span><span class="cp-tz">BST / GMT</span></div>
+  <div class="cp-row"><span class="cp-city">🇺🇸 New York</span><span class="cp-time" id="cp-nyc">--:--</span><span class="cp-tz">EST / EDT</span></div>
+  <div class="cp-row"><span class="cp-city">🇺🇸 Chicago</span><span class="cp-time" id="cp-chi">--:--</span><span class="cp-tz">CST / CDT</span></div>
+  <div class="cp-row"><span class="cp-city">🇨🇦 Toronto</span><span class="cp-time" id="cp-tor">--:--</span><span class="cp-tz">EST / EDT</span></div>
+  <div class="cp-row"><span class="cp-city">🇨🇦 Vancouver</span><span class="cp-time" id="cp-van">--:--</span><span class="cp-tz">PST / PDT</span></div>
+  <div class="cp-row"><span class="cp-city">🇦🇪 Dubai</span><span class="cp-time" id="cp-dxb">--:--</span><span class="cp-tz">GST UTC+4</span></div>
+  <div class="cp-row"><span class="cp-city">🇸🇬 Singapore</span><span class="cp-time" id="cp-sgp">--:--</span><span class="cp-tz">SGT UTC+8</span></div>
+</div>
 
 <!-- MARQUEE BELOW NAV -->
 <div class="top-marquee">
