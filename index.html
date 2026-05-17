@@ -69,7 +69,7 @@ nav{
   background:var(--nav-bg);backdrop-filter:blur(18px);
   border-bottom:1px solid var(--border);
   height:60px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 5%;transition:background .3s;gap:8px;
+  padding:0 5%;transition:background .3s;
 }
 .nav-logo{font-size:1.05rem;font-weight:800;color:var(--text)}
 .nav-logo span{color:var(--blue)}
@@ -84,7 +84,7 @@ nav{
 [data-theme="light"] .sun{display:inline}[data-theme="light"] .moon{display:none}
 
 /* nav clock */
-.nav-clock-wrap{position:absolute;left:50%;transform:translateX(-50%);z-index:301}
+.nav-clock-wrap{position:absolute;left:50%;transform:translateX(-50%)}
 .nav-clock{
   display:flex;align-items:center;gap:6px;
   padding:5px 14px;border-radius:20px;
@@ -92,7 +92,6 @@ nav{
   cursor:pointer;transition:all .2s;user-select:none;
   font-size:0.78rem;font-weight:700;color:var(--text);
   letter-spacing:.04em;font-family:'Nunito Sans',sans-serif;
-  white-space:nowrap;
 }
 .nav-clock:hover{border-color:var(--blue);background:rgba(37,99,235,.08)}
 .nav-clock-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:istpulse 2s infinite}
@@ -103,21 +102,14 @@ nav{
 
 /* clock panel */
 .clock-panel{
-  display:none;
-  position:fixed;
-  top:68px;
-  left:50%;
-  transform:translateX(-50%);
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:14px 16px;
-  min-width:260px;
-  box-shadow:0 16px 48px rgba(0,0,0,.5);
-  z-index:500;
+  display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:14px 16px;min-width:240px;
+  box-shadow:0 16px 40px rgba(0,0,0,.3);z-index:400;
+  animation:cpfade .2s ease;
 }
-.clock-panel.open{display:block;animation:cpfade .2s ease}
-@keyframes cpfade{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.clock-panel.open{display:block}
+@keyframes cpfade{from{opacity:0;transform:translateX(-50%) translateY(-6px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 .cp-title{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .cp-row{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border)}
 .cp-row:last-child{border-bottom:none}
@@ -432,36 +424,14 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
   .skills-outer{grid-template-columns:1fr}
   .hcard-stats{grid-template-columns:repeat(2,1fr)}
   .footer-top{grid-template-columns:1fr 1fr}
-  .hero-right{margin-top:8px}
 }
 @media(max-width:640px){
-  nav{padding:0 12px;height:54px}
-  nav{position:relative}
-  .nav-clock-wrap{position:static;transform:none;flex:1;display:flex;justify-content:center}
-  .nav-clock{padding:4px 10px;font-size:0.7rem;gap:4px}
-  .nav-clock-label{display:none}
-  .nav-links{gap:2px}
+  nav{padding:0 16px}
   .nav-links a:not(.nav-cta){display:none}
-  .nav-cta{padding:5px 10px!important;font-size:0.72rem!important}
-  .section{padding:56px 4%}
-  #hero{padding-top:64px;padding-bottom:48px}
-  .hero h1{font-size:2rem;letter-spacing:-.5px}
-  .hero-sub{font-size:0.88rem}
-  .btn{padding:10px 18px;font-size:0.76rem}
-  .hero-stats-row{margin-top:16px}
-  .hsr-n{font-size:1.2rem}
-  .hsr-sm{font-size:0.72rem}
-  .tcard-body{font-size:0.7rem;padding:12px 14px}
+  .section{padding:60px 5%}
   .edu-grid,.fl-srv-grid{grid-template-columns:1fr}
   .footer-top{grid-template-columns:1fr}
   .hcard-stats{grid-template-columns:repeat(2,1fr)}
-  .port-grid{grid-template-columns:1fr}
-  .hero-two-col{gap:28px}
-  .tcard{margin-top:16px}
-  .srv-grid{grid-template-columns:1fr}
-  .about-photo{width:100%;height:120px}
-  .sec-title{font-size:1.5rem}
-  .hsr-item{padding:10px 6px}
 }
 </style>
 </head>
@@ -479,6 +449,34 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
       <span class="nav-clock-label">IST</span>
       <span class="nav-clock-chevron" id="navClockChevron">▾</span>
     </div>
+    <div class="clock-panel" id="clockPanel">
+      <div class="cp-title">World Clocks</div>
+      <div class="cp-row">
+        <span class="cp-city">🇮🇳 New Delhi</span>
+        <span class="cp-time" id="cp-ist">--:--</span>
+        <span class="cp-tz">IST UTC+5:30</span>
+      </div>
+      <div class="cp-row">
+        <span class="cp-city">🇬🇧 London</span>
+        <span class="cp-time" id="cp-lon">--:--</span>
+        <span class="cp-tz">BST</span>
+      </div>
+      <div class="cp-row">
+        <span class="cp-city">🇺🇸 New York</span>
+        <span class="cp-time" id="cp-nyc">--:--</span>
+        <span class="cp-tz">EDT</span>
+      </div>
+      <div class="cp-row">
+        <span class="cp-city">🇦🇪 Dubai</span>
+        <span class="cp-time" id="cp-dxb">--:--</span>
+        <span class="cp-tz">GST UTC+4</span>
+      </div>
+      <div class="cp-row">
+        <span class="cp-city">🇸🇬 Singapore</span>
+        <span class="cp-time" id="cp-sgp">--:--</span>
+        <span class="cp-tz">SGT UTC+8</span>
+      </div>
+    </div>
   </div>
 
   <div class="nav-links">
@@ -491,19 +489,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
     <button class="theme-btn" onclick="toggleTheme()"><span class="sun">☀️</span><span class="moon">🌙</span></button>
   </div>
 </nav>
-
-<!-- CLOCK PANEL — outside nav so it renders above everything -->
-<div class="clock-panel" id="clockPanel">
-  <div class="cp-title">World Clocks</div>
-  <div class="cp-row"><span class="cp-city">🇮🇳 New Delhi</span><span class="cp-time" id="cp-ist">--:--</span><span class="cp-tz">IST UTC+5:30</span></div>
-  <div class="cp-row"><span class="cp-city">🇬🇧 London</span><span class="cp-time" id="cp-lon">--:--</span><span class="cp-tz">BST / GMT</span></div>
-  <div class="cp-row"><span class="cp-city">🇺🇸 New York</span><span class="cp-time" id="cp-nyc">--:--</span><span class="cp-tz">EST / EDT</span></div>
-  <div class="cp-row"><span class="cp-city">🇺🇸 Chicago</span><span class="cp-time" id="cp-chi">--:--</span><span class="cp-tz">CST / CDT</span></div>
-  <div class="cp-row"><span class="cp-city">🇨🇦 Toronto</span><span class="cp-time" id="cp-tor">--:--</span><span class="cp-tz">EST / EDT</span></div>
-  <div class="cp-row"><span class="cp-city">🇨🇦 Vancouver</span><span class="cp-time" id="cp-van">--:--</span><span class="cp-tz">PST / PDT</span></div>
-  <div class="cp-row"><span class="cp-city">🇦🇪 Dubai</span><span class="cp-time" id="cp-dxb">--:--</span><span class="cp-tz">GST UTC+4</span></div>
-  <div class="cp-row"><span class="cp-city">🇸🇬 Singapore</span><span class="cp-time" id="cp-sgp">--:--</span><span class="cp-tz">SGT UTC+8</span></div>
-</div>
 
 <!-- MARQUEE BELOW NAV -->
 <div class="top-marquee">
@@ -608,23 +593,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
           <span class="tcard-title">shivam_gupta.json</span>
           <span class="tcard-online">● online</span>
         </div>
-        <div class="tcard-body">
-          <div><span class="ts">{</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"name"</span><span class="ts">: </span><span class="tstr">"Shivam Gupta"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"title"</span><span class="ts">: </span><span class="tstr">"Product &amp; Data Analyst"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"location"</span><span class="ts">: </span><span class="tstr">"New Delhi, India"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"experience_years"</span><span class="ts">: </span><span class="tnum">5</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"core_expertise"</span><span class="ts">: [</span></div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tstr">"Eliminate manual processes end-to-end"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tstr">"CRM architecture &amp; automation"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tstr">"Data pipelines &amp; BI dashboards"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tstr">"API &amp; webhook integrations"</span></div>
-          <div>&nbsp;&nbsp;<span class="ts">],</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"approach"</span><span class="ts">: </span><span class="tstr">"If humans do it manually, I automate it"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"certified"</span><span class="ts">: </span><span class="tv">["AWS SAA-C03", "MBA Liverpool"]</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"freelance"</span><span class="ts">: </span><span class="tv">true</span></div>
-          <div><span class="ts">}</span><span class="tcursor"></span></div>
-        </div>
+        <div class="tcard-body" id="tcard-body-typed"></div>
       </div>
     </div><!-- /hero-right -->
   </div><!-- /hero-two-col -->
@@ -1028,9 +997,6 @@ function updateClocks(){
   set('cp-ist','Asia/Kolkata');
   set('cp-lon','Europe/London');
   set('cp-nyc','America/New_York');
-  set('cp-chi','America/Chicago');
-  set('cp-tor','America/Toronto');
-  set('cp-van','America/Vancouver');
   set('cp-dxb','Asia/Dubai');
   set('cp-sgp','Asia/Singapore');
 }
@@ -1065,6 +1031,95 @@ function closeM(id){document.getElementById(id).classList.remove('on');document.
 function closeBg(e,id){if(e.target===document.getElementById(id))closeM(id)}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.mwrap.on').forEach(m=>{m.classList.remove('on');document.body.style.overflow=''})});
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
+
+/* ── JSON TYPEWRITER ── */
+(function(){
+  // Each token: [className, text]
+  // className '' = plain text / no span needed
+  const tokens = [
+    ['ts','{'],['br',''],
+    ['','  '],['tk','"name"'],['ts',': '],['tstr','"Shivam Gupta"'],['ts',','],['br',''],
+    ['','  '],['tk','"title"'],['ts',': '],['tstr','"Product & Data Analyst"'],['ts',','],['br',''],
+    ['','  '],['tk','"location"'],['ts',': '],['tstr','"New Delhi, India"'],['ts',','],['br',''],
+    ['','  '],['tk','"experience_years"'],['ts',': '],['tnum','5'],['ts',','],['br',''],
+    ['','  '],['tk','"core_expertise"'],['ts',': ['],['br',''],
+    ['','    '],['tstr','"Eliminate manual processes end-to-end"'],['ts',','],['br',''],
+    ['','    '],['tstr','"CRM architecture & automation"'],['ts',','],['br',''],
+    ['','    '],['tstr','"Data pipelines & BI dashboards"'],['ts',','],['br',''],
+    ['','    '],['tstr','"API & webhook integrations"'],['br',''],
+    ['','  '],['ts','],'],['br',''],
+    ['','  '],['tk','"approach"'],['ts',': '],['tstr','"If humans do it manually, I automate it"'],['ts',','],['br',''],
+    ['','  '],['tk','"certified"'],['ts',': '],['tv','["AWS SAA-C03", "MBA Liverpool"]'],['ts',','],['br',''],
+    ['','  '],['tk','"freelance"'],['ts',': '],['tv','true'],['br',''],
+    ['ts','}'],
+  ];
+
+  const container = document.getElementById('tcard-body-typed');
+  if(!container) return;
+
+  // Build a flat list of characters to type, each carrying its span element
+  const charQueue = [];
+
+  // We'll build line arrays: each line is an array of {cls, text} tokens
+  const lines = [[]];
+  tokens.forEach(([cls, text]) => {
+    if(cls === 'br') { lines.push([]); return; }
+    if(text) lines[lines.length-1].push({cls, text});
+  });
+
+  // Flatten into per-character items with pre-created span refs
+  lines.forEach((lineTokens, li) => {
+    lineTokens.forEach(({cls, text}) => {
+      const span = document.createElement('span');
+      if(cls) span.className = cls;
+      for(let i=0; i<text.length; i++) {
+        charQueue.push({lineIdx:li, span, char:text[i], isFirst:i===0});
+      }
+    });
+    if(li < lines.length-1) charQueue.push({lineIdx:li, newline:true});
+  });
+
+  // Pre-create line divs
+  const lineDivs = lines.map(() => {
+    const d = document.createElement('div');
+    container.appendChild(d);
+    return d;
+  });
+
+  // Cursor element
+  const cursor = document.createElement('span');
+  cursor.className = 'tcursor';
+
+  const appendedSpans = new WeakSet();
+  let qi = 0;
+
+  function typeNext() {
+    if(qi >= charQueue.length) {
+      const lastDiv = lineDivs[lineDivs.length-1];
+      lastDiv.appendChild(cursor);
+      return;
+    }
+    const item = charQueue[qi++];
+    if(item.newline) {
+      setTimeout(typeNext, 18);
+      return;
+    }
+    const lineDiv = lineDivs[item.lineIdx];
+    if(!appendedSpans.has(item.span)) {
+      lineDiv.appendChild(item.span);
+      appendedSpans.add(item.span);
+    }
+    item.span.textContent += item.char;
+
+    // Move cursor to current line end
+    if(cursor.parentNode) cursor.parentNode.removeChild(cursor);
+    lineDiv.appendChild(cursor);
+
+    setTimeout(typeNext, 22);
+  }
+
+  setTimeout(typeNext, 600);
+})();
 </script>
 </body>
 </html>
