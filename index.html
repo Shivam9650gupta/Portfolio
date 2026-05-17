@@ -61,6 +61,23 @@ img{display:block;max-width:100%}
 .mizo .d{background:var(--zoho)}.mizo{color:#5fa8d9}
 .min .d{background:var(--n8n)}.min{color:#f07090}
 .mig .d{background:var(--muted)}
+/* extra marquee colours */
+.mi-sql .d{background:#f59e0b}.mi-sql{color:#f59e0b}
+.mi-bi .d{background:#f7c948}.mi-bi{color:#f7c948}
+.mi-jira .d{background:#2684ff}.mi-jira{color:#6ba3ff}
+.mi-notion .d{background:#a78bfa}.mi-notion{color:#a78bfa}
+.mi-click .d{background:#7c3aed}.mi-click{color:#b794f4}
+.mi-aws .d{background:#f97316}.mi-aws{color:#fb923c}
+.mi-mongo .d{background:#4ade80}.mi-mongo{color:#4ade80}
+.mi-ps .d{background:#06b6d4}.mi-ps{color:#22d3ee}
+.mi-la .d{background:#e879f9}.mi-la{color:#e879f9}
+.mi-pa .d{background:#60a5fa}.mi-pa{color:#93c5fd}
+.mi-gs .d{background:#34d399}.mi-gs{color:#34d399}
+.mi-xl .d{background:#16a34a}.mi-xl{color:#4ade80}
+.mi-cf .d{background:#94a3b8}.mi-cf{color:#cbd5e1}
+.mi-hs .d{background:#ff6b35}.mi-hs{color:#ff8c5a}
+.mi-api .d{background:#818cf8}.mi-api{color:#a5b4fc}
+.mi-wh .d{background:#f472b6}.mi-wh{color:#f9a8d4}
 .msep{color:var(--muted);font-size:0.5rem;padding:0 2px}
 
 /* ── NAV ── */
@@ -424,39 +441,25 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
   .skills-outer{grid-template-columns:1fr}
   .hcard-stats{grid-template-columns:repeat(2,1fr)}
   .footer-top{grid-template-columns:1fr 1fr}
-  .hero-right{order:2}
-  .hero-left{order:1}
 }
 @media(max-width:640px){
-  /* Nav: stack logo+links on top row, clock below */
-  nav{padding:0 14px;height:auto;flex-wrap:wrap;gap:0;padding-top:8px;padding-bottom:8px}
-  .nav-logo{order:1;flex:1}
-  .nav-links{order:2}
+  nav{padding:0 16px}
   .nav-links a:not(.nav-cta){display:none}
-  /* Clock: full-width second row, centered */
-  .nav-clock-wrap{
-    position:static;transform:none;
-    order:3;width:100%;display:flex;justify-content:center;
-    padding-bottom:6px;
-  }
-  .nav-clock{font-size:0.72rem;padding:4px 12px}
-  .clock-panel{top:100%;left:50%;transform:translateX(-50%)}
   .section{padding:60px 5%}
   .edu-grid,.fl-srv-grid{grid-template-columns:1fr}
   .footer-top{grid-template-columns:1fr}
   .hcard-stats{grid-template-columns:repeat(2,1fr)}
-  /* Hero single col */
-  .hero-two-col{gap:32px}
-  #hero{padding-top:48px;padding-bottom:48px}
-  /* JSON card: compact font */
-  .tcard-body{font-size:0.7rem;line-height:1.75;padding:12px 14px}
-  .tcard-title{font-size:0.62rem}
-  /* Stats row */
-  .hsr-n{font-size:1.3rem}
-  .hsr-l{font-size:0.58rem}
-  /* Buttons full-width stacked */
-  .hero-btns{flex-direction:column;gap:10px}
-  .hero-btns .btn{justify-content:center;width:100%}
+  /* clock on mobile */
+  .nav-clock{padding:4px 10px;font-size:0.72rem;gap:4px}
+  .nav-clock-label{display:none}
+  #nav-ist-time{font-size:0.72rem;letter-spacing:0}
+  .clock-panel{
+    left:50%;transform:translateX(-50%);
+    min-width:220px;max-width:calc(100vw - 32px);
+  }
+  .cp-tz{font-size:0.6rem;min-width:60px}
+  .cp-time{font-size:0.78rem;min-width:38px}
+  .cp-city{font-size:0.73rem}
 }
 </style>
 </head>
@@ -501,6 +504,11 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
         <span class="cp-time" id="cp-sgp">--:--</span>
         <span class="cp-tz">SGT UTC+8</span>
       </div>
+      <div class="cp-row">
+        <span class="cp-city">🇨🇦 Toronto</span>
+        <span class="cp-time" id="cp-can">--:--</span>
+        <span class="cp-tz">EDT UTC-4</span>
+      </div>
     </div>
   </div>
 
@@ -521,56 +529,56 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
     <span class="mi mizo"><span class="d"></span>Zoho CRM</span><span class="msep">·</span>
     <span class="mi miz"><span class="d"></span>Zapier</span><span class="msep">·</span>
     <span class="mi min"><span class="d"></span>n8n</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>SQL</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Power BI</span><span class="msep">·</span>
+    <span class="mi mi-sql"><span class="d"></span>SQL</span><span class="msep">·</span>
+    <span class="mi mi-bi"><span class="d"></span>Power BI</span><span class="msep">·</span>
     <span class="mi miz"><span class="d"></span>Slack</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Jira</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Notion</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>ClickUp</span><span class="msep">·</span>
+    <span class="mi mi-jira"><span class="d"></span>Jira</span><span class="msep">·</span>
+    <span class="mi mi-notion"><span class="d"></span>Notion</span><span class="msep">·</span>
+    <span class="mi mi-click"><span class="d"></span>ClickUp</span><span class="msep">·</span>
     <span class="mi miz"><span class="d"></span>Postman</span><span class="msep">·</span>
     <span class="mi mizo"><span class="d"></span>Zoho Desk</span><span class="msep">·</span>
     <span class="mi mizo"><span class="d"></span>Zoho Books</span><span class="msep">·</span>
     <span class="mi mizo"><span class="d"></span>Zoho Recruit</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Looker Studio</span><span class="msep">·</span>
+    <span class="mi mi-la"><span class="d"></span>Looker Studio</span><span class="msep">·</span>
     <span class="mi min"><span class="d"></span>Stripe</span><span class="msep">·</span>
     <span class="mi min"><span class="d"></span>Razorpay</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>AWS</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>MongoDB</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Confluence</span><span class="msep">·</span>
-    <span class="mi miz"><span class="d"></span>HubSpot</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Power Automate</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Apps Script</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Excel</span><span class="msep">·</span>
+    <span class="mi mi-aws"><span class="d"></span>AWS</span><span class="msep">·</span>
+    <span class="mi mi-mongo"><span class="d"></span>MongoDB</span><span class="msep">·</span>
+    <span class="mi mi-cf"><span class="d"></span>Confluence</span><span class="msep">·</span>
+    <span class="mi mi-hs"><span class="d"></span>HubSpot</span><span class="msep">·</span>
+    <span class="mi mi-pa"><span class="d"></span>Power Automate</span><span class="msep">·</span>
+    <span class="mi mi-gs"><span class="d"></span>Apps Script</span><span class="msep">·</span>
+    <span class="mi mi-xl"><span class="d"></span>Excel</span><span class="msep">·</span>
     <span class="mi mizo"><span class="d"></span>Zoho Flow</span><span class="msep">·</span>
-    <span class="mi min"><span class="d"></span>Webhooks</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>REST APIs</span><span class="msep">·</span>
+    <span class="mi mi-wh"><span class="d"></span>Webhooks</span><span class="msep">·</span>
+    <span class="mi mi-api"><span class="d"></span>REST APIs</span><span class="msep">·</span>
     <!-- duplicate for seamless loop -->
     <span class="mi mizo"><span class="d"></span>Zoho CRM</span><span class="msep">·</span>
     <span class="mi miz"><span class="d"></span>Zapier</span><span class="msep">·</span>
     <span class="mi min"><span class="d"></span>n8n</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>SQL</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Power BI</span><span class="msep">·</span>
+    <span class="mi mi-sql"><span class="d"></span>SQL</span><span class="msep">·</span>
+    <span class="mi mi-bi"><span class="d"></span>Power BI</span><span class="msep">·</span>
     <span class="mi miz"><span class="d"></span>Slack</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Jira</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Notion</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>ClickUp</span><span class="msep">·</span>
+    <span class="mi mi-jira"><span class="d"></span>Jira</span><span class="msep">·</span>
+    <span class="mi mi-notion"><span class="d"></span>Notion</span><span class="msep">·</span>
+    <span class="mi mi-click"><span class="d"></span>ClickUp</span><span class="msep">·</span>
     <span class="mi miz"><span class="d"></span>Postman</span><span class="msep">·</span>
     <span class="mi mizo"><span class="d"></span>Zoho Desk</span><span class="msep">·</span>
     <span class="mi mizo"><span class="d"></span>Zoho Books</span><span class="msep">·</span>
     <span class="mi mizo"><span class="d"></span>Zoho Recruit</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Looker Studio</span><span class="msep">·</span>
+    <span class="mi mi-la"><span class="d"></span>Looker Studio</span><span class="msep">·</span>
     <span class="mi min"><span class="d"></span>Stripe</span><span class="msep">·</span>
     <span class="mi min"><span class="d"></span>Razorpay</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>AWS</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>MongoDB</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Confluence</span><span class="msep">·</span>
-    <span class="mi miz"><span class="d"></span>HubSpot</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Power Automate</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Apps Script</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>Excel</span><span class="msep">·</span>
+    <span class="mi mi-aws"><span class="d"></span>AWS</span><span class="msep">·</span>
+    <span class="mi mi-mongo"><span class="d"></span>MongoDB</span><span class="msep">·</span>
+    <span class="mi mi-cf"><span class="d"></span>Confluence</span><span class="msep">·</span>
+    <span class="mi mi-hs"><span class="d"></span>HubSpot</span><span class="msep">·</span>
+    <span class="mi mi-pa"><span class="d"></span>Power Automate</span><span class="msep">·</span>
+    <span class="mi mi-gs"><span class="d"></span>Apps Script</span><span class="msep">·</span>
+    <span class="mi mi-xl"><span class="d"></span>Excel</span><span class="msep">·</span>
     <span class="mi mizo"><span class="d"></span>Zoho Flow</span><span class="msep">·</span>
-    <span class="mi min"><span class="d"></span>Webhooks</span><span class="msep">·</span>
-    <span class="mi mig"><span class="d"></span>REST APIs</span><span class="msep">·</span>
+    <span class="mi mi-wh"><span class="d"></span>Webhooks</span><span class="msep">·</span>
+    <span class="mi mi-api"><span class="d"></span>REST APIs</span><span class="msep">·</span>
   </div>
 </div>
 
@@ -618,7 +626,23 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
           <span class="tcard-title">shivam_gupta.json</span>
           <span class="tcard-online">● online</span>
         </div>
-        <div class="tcard-body" id="tcard-body-typed"></div>
+        <div class="tcard-body">
+          <div><span class="ts">{</span></div>
+          <div>&nbsp;&nbsp;<span class="tk">"name"</span><span class="ts">: </span><span class="tstr">"Shivam Gupta"</span><span class="ts">,</span></div>
+          <div>&nbsp;&nbsp;<span class="tk">"title"</span><span class="ts">: </span><span class="tstr">"Product &amp; Data Analyst"</span><span class="ts">,</span></div>
+          <div>&nbsp;&nbsp;<span class="tk">"location"</span><span class="ts">: </span><span class="tstr">"New Delhi, India"</span><span class="ts">,</span></div>
+          <div>&nbsp;&nbsp;<span class="tk">"experience_years"</span><span class="ts">: </span><span class="tnum">5</span><span class="ts">,</span></div>
+          <div>&nbsp;&nbsp;<span class="tk">"core_expertise"</span><span class="ts">: [</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tstr">"Eliminate manual processes end-to-end"</span><span class="ts">,</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tstr">"CRM architecture &amp; automation"</span><span class="ts">,</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tstr">"Data pipelines &amp; BI dashboards"</span><span class="ts">,</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tstr">"API &amp; webhook integrations"</span></div>
+          <div>&nbsp;&nbsp;<span class="ts">],</span></div>
+          <div>&nbsp;&nbsp;<span class="tk">"approach"</span><span class="ts">: </span><span class="tstr">"If humans do it manually, I automate it"</span><span class="ts">,</span></div>
+          <div>&nbsp;&nbsp;<span class="tk">"certified"</span><span class="ts">: </span><span class="tv">["AWS SAA-C03", "MBA Liverpool"]</span><span class="ts">,</span></div>
+          <div>&nbsp;&nbsp;<span class="tk">"freelance"</span><span class="ts">: </span><span class="tv">true</span></div>
+          <div><span class="ts">}</span><span class="tcursor"></span></div>
+        </div>
       </div>
     </div><!-- /hero-right -->
   </div><!-- /hero-two-col -->
@@ -1024,6 +1048,7 @@ function updateClocks(){
   set('cp-nyc','America/New_York');
   set('cp-dxb','Asia/Dubai');
   set('cp-sgp','Asia/Singapore');
+  set('cp-can','America/Toronto');
 }
 updateClocks();setInterval(updateClocks,1000);
 
@@ -1056,95 +1081,6 @@ function closeM(id){document.getElementById(id).classList.remove('on');document.
 function closeBg(e,id){if(e.target===document.getElementById(id))closeM(id)}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.mwrap.on').forEach(m=>{m.classList.remove('on');document.body.style.overflow=''})});
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
-
-/* ── JSON TYPEWRITER ── */
-(function(){
-  // Each token: [className, text]
-  // className '' = plain text / no span needed
-  const tokens = [
-    ['ts','{'],['br',''],
-    ['','  '],['tk','"name"'],['ts',': '],['tstr','"Shivam Gupta"'],['ts',','],['br',''],
-    ['','  '],['tk','"title"'],['ts',': '],['tstr','"Product & Data Analyst"'],['ts',','],['br',''],
-    ['','  '],['tk','"location"'],['ts',': '],['tstr','"New Delhi, India"'],['ts',','],['br',''],
-    ['','  '],['tk','"experience_years"'],['ts',': '],['tnum','5'],['ts',','],['br',''],
-    ['','  '],['tk','"core_expertise"'],['ts',': ['],['br',''],
-    ['','    '],['tstr','"Eliminate manual processes end-to-end"'],['ts',','],['br',''],
-    ['','    '],['tstr','"CRM architecture & automation"'],['ts',','],['br',''],
-    ['','    '],['tstr','"Data pipelines & BI dashboards"'],['ts',','],['br',''],
-    ['','    '],['tstr','"API & webhook integrations"'],['br',''],
-    ['','  '],['ts','],'],['br',''],
-    ['','  '],['tk','"approach"'],['ts',': '],['tstr','"If humans do it manually, I automate it"'],['ts',','],['br',''],
-    ['','  '],['tk','"certified"'],['ts',': '],['tv','["AWS SAA-C03", "MBA Liverpool"]'],['ts',','],['br',''],
-    ['','  '],['tk','"freelance"'],['ts',': '],['tv','true'],['br',''],
-    ['ts','}'],
-  ];
-
-  const container = document.getElementById('tcard-body-typed');
-  if(!container) return;
-
-  // Build a flat list of characters to type, each carrying its span element
-  const charQueue = [];
-
-  // We'll build line arrays: each line is an array of {cls, text} tokens
-  const lines = [[]];
-  tokens.forEach(([cls, text]) => {
-    if(cls === 'br') { lines.push([]); return; }
-    if(text) lines[lines.length-1].push({cls, text});
-  });
-
-  // Flatten into per-character items with pre-created span refs
-  lines.forEach((lineTokens, li) => {
-    lineTokens.forEach(({cls, text}) => {
-      const span = document.createElement('span');
-      if(cls) span.className = cls;
-      for(let i=0; i<text.length; i++) {
-        charQueue.push({lineIdx:li, span, char:text[i], isFirst:i===0});
-      }
-    });
-    if(li < lines.length-1) charQueue.push({lineIdx:li, newline:true});
-  });
-
-  // Pre-create line divs
-  const lineDivs = lines.map(() => {
-    const d = document.createElement('div');
-    container.appendChild(d);
-    return d;
-  });
-
-  // Cursor element
-  const cursor = document.createElement('span');
-  cursor.className = 'tcursor';
-
-  const appendedSpans = new WeakSet();
-  let qi = 0;
-
-  function typeNext() {
-    if(qi >= charQueue.length) {
-      const lastDiv = lineDivs[lineDivs.length-1];
-      lastDiv.appendChild(cursor);
-      return;
-    }
-    const item = charQueue[qi++];
-    if(item.newline) {
-      setTimeout(typeNext, 18);
-      return;
-    }
-    const lineDiv = lineDivs[item.lineIdx];
-    if(!appendedSpans.has(item.span)) {
-      lineDiv.appendChild(item.span);
-      appendedSpans.add(item.span);
-    }
-    item.span.textContent += item.char;
-
-    // Move cursor to current line end
-    if(cursor.parentNode) cursor.parentNode.removeChild(cursor);
-    lineDiv.appendChild(cursor);
-
-    setTimeout(typeNext, 22);
-  }
-
-  setTimeout(typeNext, 600);
-})();
 </script>
 </body>
 </html>
