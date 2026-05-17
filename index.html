@@ -101,7 +101,7 @@ nav{
 [data-theme="light"] .sun{display:inline}[data-theme="light"] .moon{display:none}
 
 /* nav clock */
-.nav-clock-wrap{position:absolute;left:50%;transform:translateX(-50%)}
+.nav-clock-wrap{position:absolute;left:50%;transform:translateX(-50%);z-index:1}
 .nav-clock{
   display:flex;align-items:center;gap:6px;
   padding:5px 14px;border-radius:20px;
@@ -109,6 +109,7 @@ nav{
   cursor:pointer;transition:all .2s;user-select:none;
   font-size:0.78rem;font-weight:700;color:var(--text);
   letter-spacing:.04em;font-family:'Nunito Sans',sans-serif;
+  white-space:nowrap;
 }
 .nav-clock:hover{border-color:var(--blue);background:rgba(37,99,235,.08)}
 .nav-clock-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:istpulse 2s infinite}
@@ -121,7 +122,7 @@ nav{
 .clock-panel{
   display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);
   background:var(--bg2);border:1px solid var(--border);
-  border-radius:12px;padding:14px 16px;min-width:240px;
+  border-radius:12px;padding:14px 16px;min-width:270px;
   box-shadow:0 16px 40px rgba(0,0,0,.3);z-index:400;
   animation:cpfade .2s ease;
 }
@@ -130,9 +131,9 @@ nav{
 .cp-title{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .cp-row{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border)}
 .cp-row:last-child{border-bottom:none}
-.cp-city{font-size:0.78rem;color:var(--sub);flex:1}
-.cp-time{font-size:0.82rem;font-weight:700;color:var(--text);font-family:'Courier New',monospace;min-width:44px;text-align:right}
-.cp-tz{font-size:0.65rem;color:var(--muted);min-width:72px;text-align:right}
+.cp-city{font-size:0.78rem;color:var(--sub);flex:1;white-space:nowrap;min-width:100px}
+.cp-time{font-size:0.82rem;font-weight:700;color:var(--text);font-family:'Courier New',monospace;min-width:44px;text-align:right;white-space:nowrap}
+.cp-tz{font-size:0.65rem;color:var(--muted);min-width:72px;text-align:right;white-space:nowrap}
 
 /* ── SECTIONS ── */
 .section{padding:80px 5%}
@@ -443,23 +444,32 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
   .footer-top{grid-template-columns:1fr 1fr}
 }
 @media(max-width:640px){
-  nav{padding:0 16px}
+  /* nav layout on mobile: logo | clock | theme+cta */
+  nav{padding:0 12px;height:56px}
+  .nav-clock-wrap{position:static;transform:none;flex:1;display:flex;justify-content:center}
+  .nav-links{gap:2px}
   .nav-links a:not(.nav-cta){display:none}
+  .nav-cta{padding:6px 12px!important;font-size:0.73rem!important}
+  .theme-btn{padding:5px 8px;margin-left:2px}
+  /* clock pill on mobile */
+  .nav-clock{padding:4px 10px;font-size:0.7rem;gap:4px;letter-spacing:0}
+  .nav-clock-label{display:none}
+  #nav-ist-time{font-size:0.7rem}
+  /* clock dropdown — pin to top of screen, full-width friendly */
+  .clock-panel{
+    position:fixed;top:64px;left:50%;transform:translateX(-50%);
+    min-width:260px;max-width:calc(100vw - 24px);
+    box-shadow:0 12px 36px rgba(0,0,0,.5);
+  }
+  @keyframes cpfade{from{opacity:0;transform:translateX(-50%) translateY(-4px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+  .cp-city{font-size:0.74rem;min-width:90px}
+  .cp-time{font-size:0.78rem;min-width:36px}
+  .cp-tz{font-size:0.58rem;min-width:56px}
+  /* other */
   .section{padding:60px 5%}
   .edu-grid,.fl-srv-grid{grid-template-columns:1fr}
   .footer-top{grid-template-columns:1fr}
   .hcard-stats{grid-template-columns:repeat(2,1fr)}
-  /* clock on mobile */
-  .nav-clock{padding:4px 10px;font-size:0.72rem;gap:4px}
-  .nav-clock-label{display:none}
-  #nav-ist-time{font-size:0.72rem;letter-spacing:0}
-  .clock-panel{
-    left:50%;transform:translateX(-50%);
-    min-width:220px;max-width:calc(100vw - 32px);
-  }
-  .cp-tz{font-size:0.6rem;min-width:60px}
-  .cp-time{font-size:0.78rem;min-width:38px}
-  .cp-city{font-size:0.73rem}
 }
 </style>
 </head>
