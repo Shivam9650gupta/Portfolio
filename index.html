@@ -82,11 +82,41 @@ img{display:block;max-width:100%}
 /* ── NAV ── */
 nav{
   position:sticky;top:0;left:0;right:0;z-index:300;
-  background:var(--nav-bg);backdrop-filter:blur(18px);
+  background:var(--nav-bg);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
   border-bottom:1px solid var(--border);
   height:60px;display:flex;align-items:center;justify-content:space-between;
   padding:0 5%;transition:background .3s;
+  /* FIX: contain stacking context so it doesn't trap fixed children */
+  isolation:isolate;
 }
+
+/* ══════════════════════════════════════════════════
+   MOBILE NAV BUG FIX
+   backdrop-filter on <nav> creates a new stacking context on iOS Safari.
+   When any ancestor has a stacking context (backdrop-filter, transform, etc.),
+   position:fixed descendants are positioned relative to that ancestor's
+   containing block — not the viewport — causing the mobile nav to appear
+   at the wrong (top) position instead of fixed to the bottom of the screen.
+   
+   FIX A: Disable backdrop-filter on <nav> for mobile screens so it no longer
+           creates a stacking context that traps #mobile-nav.
+   FIX B: Give #mobile-nav its own GPU compositing layer via translateZ(0).
+   FIX C: Raise #mobile-nav z-index well above all other elements.
+══════════════════════════════════════════════════ */
+@media(max-width:640px){
+  nav{
+    /* Removing backdrop-filter eliminates the stacking context that was
+       trapping position:fixed children on iOS/mobile WebKit */
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+    /* Use a solid background fallback instead */
+    background:var(--bg)!important;
+  }
+  [data-theme="light"] nav{
+    background:var(--bg2)!important;
+  }
+}
+
 .nav-logo{font-size:1.05rem;font-weight:800;color:var(--text)}
 .nav-logo span{color:var(--blue)}
 .nav-links{display:flex;align-items:center;gap:3px}
@@ -197,11 +227,11 @@ nav{
   font-size:0.78rem;
   line-height:1.9;
   background:#0d1525;
-  min-height:320px; /* prevent layout jump during typing */
+  min-height:320px;
 }
 .tk{color:#c084fc}.tv{color:#34d399}.ts{color:#3a5070}.tstr{color:#fbbf24}.tnum{color:#f87171}
 
-/* typing cursor — inline blinking block */
+/* typing cursor */
 .tcursor{
   display:inline-block;
   width:7px;height:13px;
@@ -283,8 +313,6 @@ nav{
   gap:52px;
   align-items:center;
 }
-.hero-left{}
-.hero-right{}
 .hcard-top{display:flex;align-items:center;gap:14px;margin-bottom:20px}
 .hcard-avatar{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--n8n));display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;color:#fff;flex-shrink:0}
 .hcard-name{font-size:1rem;font-weight:800}
@@ -588,26 +616,52 @@ body::after{
   opacity:.018;pointer-events:none;z-index:1;
 }
 
-/* ── MOBILE BOTTOM NAV ── */
+/* ══════════════════════════════════════
+   MOBILE BOTTOM NAV — FIXED
+══════════════════════════════════════ */
 #mobile-nav{
   display:none;
-  position:fixed;bottom:0;left:0;right:0;z-index:500;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  /* FIX: z-index raised to 9990 — well above top nav (300), modals (500),
+     status widget (400), back-to-top (400), and progress bar (9999-1) */
+  z-index:9990;
   background:rgba(13,13,20,0.96);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  /* FIX: translateZ(0) forces this element onto its own GPU compositing layer,
+     bypassing any stacking context from ancestor elements (backdrop-filter, etc.) */
+  -webkit-transform:translateZ(0);
+  transform:translateZ(0);
+  /* FIX: will-change hints to browser this is a composited layer */
+  will-change:transform;
   border-top:1px solid var(--border);
   padding:8px 0 max(8px,env(safe-area-inset-bottom));
+  /* No backdrop-filter here — it would create its own stacking context */
 }
-[data-theme="light"] #mobile-nav{background:rgba(245,246,250,0.97)}
+[data-theme="light"] #mobile-nav{
+  background:rgba(245,246,250,0.98);
+}
 .mob-nav-items{display:flex;justify-content:space-around;align-items:center}
 .mob-nav-item{
   display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:4px 12px;border-radius:8px;
+  padding:4px 10px;border-radius:8px;
   font-size:0.6rem;font-weight:700;color:var(--muted);
   text-decoration:none;text-transform:uppercase;letter-spacing:.06em;
   transition:all .18s;
+  /* Prevent text overflow on narrow screens */
+  white-space:nowrap;
+  min-width:0;
 }
 .mob-nav-item:hover,.mob-nav-item.active{color:var(--blue)}
 .mob-nav-icon{font-size:1.1rem;line-height:1}
+
+/* Extra small screens: tighten spacing */
+@media(max-width:380px){
+  .mob-nav-item{padding:4px 6px;font-size:0.52rem;letter-spacing:.03em}
+  .mob-nav-icon{font-size:1rem}
+}
+
 @media(max-width:640px){
   #mobile-nav{display:block}
   body{padding-bottom:70px}
@@ -812,18 +866,6 @@ body::after{
   </div>
 </div>
 
-<!-- MOBILE BOTTOM NAV -->
-<nav id="mobile-nav">
-  <div class="mob-nav-items">
-    <a href="#hero" class="mob-nav-item active" data-section="hero"><span class="mob-nav-icon">🏠</span>Home</a>
-    <a href="#about" class="mob-nav-item" data-section="about"><span class="mob-nav-icon">👤</span>About</a>
-    <a href="#work" class="mob-nav-item" data-section="work"><span class="mob-nav-icon">💼</span>Work</a>
-    <a href="#experience" class="mob-nav-item" data-section="experience"><span class="mob-nav-icon">📅</span>Exp</a>
-    <a href="#freelance" class="mob-nav-item" data-section="freelance"><span class="mob-nav-icon">✉️</span>Contact</a>
-  </div>
-</nav>
-<div class="testi-swipe-hint">← swipe to see more →</div>
-
 <!-- PROGRESS BAR -->
 <div id="progress-bar"></div>
 <!-- BACK TO TOP -->
@@ -915,7 +957,7 @@ body::after{
     <span class="mi mizo"><span class="d"></span>Zoho Flow</span><span class="msep">·</span>
     <span class="mi mi-wh"><span class="d"></span>Webhooks</span><span class="msep">·</span>
     <span class="mi mi-api"><span class="d"></span>REST APIs</span><span class="msep">·</span>
-    <!-- duplicate -->
+    <!-- duplicate for seamless loop -->
     <span class="mi mizo"><span class="d"></span>Zoho CRM</span><span class="msep">·</span>
     <span class="mi miz"><span class="d"></span>Zapier</span><span class="msep">·</span>
     <span class="mi min"><span class="d"></span>n8n</span><span class="msep">·</span>
@@ -944,6 +986,18 @@ body::after{
     <span class="mi mi-api"><span class="d"></span>REST APIs</span><span class="msep">·</span>
   </div>
 </div>
+
+<!-- MOBILE BOTTOM NAV — placed after all sticky/fixed ancestors to avoid stacking context issues -->
+<nav id="mobile-nav">
+  <div class="mob-nav-items">
+    <a href="#hero" class="mob-nav-item active" data-section="hero"><span class="mob-nav-icon">🏠</span>Home</a>
+    <a href="#about" class="mob-nav-item" data-section="about"><span class="mob-nav-icon">👤</span>About</a>
+    <a href="#work" class="mob-nav-item" data-section="work"><span class="mob-nav-icon">💼</span>Work</a>
+    <a href="#experience" class="mob-nav-item" data-section="experience"><span class="mob-nav-icon">📅</span>Exp</a>
+    <a href="#freelance" class="mob-nav-item" data-section="freelance"><span class="mob-nav-icon">✉️</span>Contact</a>
+  </div>
+</nav>
+<div class="testi-swipe-hint">← swipe to see more →</div>
 
 <!-- ── HERO ── -->
 <section id="hero" class="section">
@@ -989,9 +1043,7 @@ body::after{
           <span class="tcard-title">shivam_gupta.json</span>
           <span class="tcard-online">● online</span>
         </div>
-        <!-- Typing animation renders here -->
         <div class="tcard-body" id="tcard-body"></div>
-
       </div>
     </div>
   </div>
@@ -1094,7 +1146,6 @@ body::after{
     <p class="sec-body">Real automation solutions shipped in production. Click any card to see the full breakdown.</p>
   </div>
 
-  <!-- TIME SAVED TICKER -->
   <div class="ticker-strip reveal">
     <div>
       <div class="ticker-label">⏱ Total time saved across all projects</div>
@@ -1116,7 +1167,6 @@ body::after{
     </div>
   </div>
 
-  <!-- FILTER TABS -->
   <div class="port-filters reveal">
     <button class="pf-btn active" data-filter="all">All</button>
     <button class="pf-btn" data-filter="zoho">Zoho</button>
@@ -1308,13 +1358,13 @@ body::after{
 <div class="mwrap" id="m2" onclick="closeBg(event,'m2')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--n8n)">02 · Google Sheets</div><div class="m-h">Automated Invoice Generation</div></div><div class="mx" onclick="closeM('m2')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Businesses created invoices manually from spreadsheets — time-consuming, inconsistent, and error-prone at scale.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">Row-triggered automation that validates data, calculates totals, assigns invoice numbers, generates branded PDFs, and emails them to clients.</p></div><div class="mb"><div class="mb-lbl">Key Features</div><ul class="mb-ul ul-n"><li>Row-based trigger — new or updated row</li><li>Auto-calculation of subtotal, tax, grand total</li><li>Dynamic invoice numbering & client history</li><li>Branded PDF with logo and GST/VAT fields</li><li>Optional email via Gmail or Outlook</li></ul></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-n"><li>Invoice generated in under 10 seconds</li><li>Zero manual copy-paste errors</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpg">Google Sheets</span><span class="mp mpg">Apps Script</span><span class="mp mpz">Zapier</span><span class="mp mpg">Gmail / Outlook</span></div></div></div></div></div>
 <div class="mwrap" id="m3" onclick="closeBg(event,'m3')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:#5fa8d9">03 · Real-time Tracking</div><div class="m-h">Automated Expense Tracker</div></div><div class="mx" onclick="closeM('m3')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Manual expense tracking across UPI, bank transfers, credit cards, and IMPS led to missed entries and poor real-time financial visibility.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">Webhooks capture transaction data in real time, log it into structured Google Sheets with auto-categorisation, and generate monthly summaries automatically.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-zo"><li>100% automated logging — zero manual entries</li><li>Unified tracking across all payment channels</li><li>Accurate monthly financial summaries</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpg">Google Apps Script</span><span class="mp mpg">Google Sheets</span><span class="mp mpg">Webhooks</span></div></div></div></div></div>
 <div class="mwrap" id="m4" onclick="closeBg(event,'m4')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--blue)">04 · CRM + Slack</div><div class="m-h">CRM Visibility & Alert System</div></div><div class="mx" onclick="closeM('m4')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Stakeholders had no real-time visibility into lead changes and ownership transfers — causing slow follow-ups and endless manual status checks.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">CRM automation rules fire contextual Slack and email alerts when key actions occur — deal name, owner, stage, and next action included in every message.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-b"><li>Faster follow-ups on high-priority leads</li><li>Improved accountability and ownership clarity</li><li>Near-elimination of manual status-check meetings</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho CRM</span><span class="mp mpzo">Zoho Flow</span><span class="mp mpg">Slack</span><span class="mp mpg">Email</span></div></div></div></div></div>
-<div class="mwrap" id="m5" onclick="closeBg(event,'m5')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:#5fa8d9">05 · Zoho Forms + Sheets + Slack</div><div class="m-h">Weekly Report Collection & Distribution</div></div><div class="mx" onclick="closeM('m5')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Weekly reporting was inconsistent — submissions were missed, delayed, or sent to the wrong person. Management had no visibility into who submitted on time.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">A Zoho Form captures weekly reports from staff, managers, and leaders. Data is stored in Zoho Sheets and distributed up the hierarchy on a schedule. Slack reminders fire every Friday. Late or missing submissions are tracked and escalated automatically to the relevant reporting manager.</p></div><div class="mb"><div class="mb-lbl">Key Features</div><ul class="mb-ul ul-zo"><li>Zoho Form captures reports from each level of the hierarchy</li><li>Auto-distribution: staff report → manager, manager report → leader, leader report → CEO</li><li>Scheduled Slack reminders every Friday before deadline</li><li>On-time / late submission tracking logged per person</li><li>Slack alert to reporting manager when submission is late or missed</li></ul></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-zo"><li>100% visibility into submission compliance</li><li>Fully automated distribution — zero manual forwarding</li><li>Late submissions surfaced immediately to management</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho Forms</span><span class="mp mpzo">Zoho Sheets</span><span class="mp mpzo">Zoho Flow</span><span class="mp mpg">Slack</span><span class="mp mpg">Scheduled Triggers</span></div></div></div></div></div>
-<div class="mwrap" id="m6" onclick="closeBg(event,'m6')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--zap)">06 · Zoho CRM + Slack</div><div class="m-h">Slack Lead Notification Pipeline</div></div><div class="mx" onclick="closeM('m6')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Sales reps missed or delayed follow-ups because new lead notifications were buried in email or required logging into the CRM manually.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">When a new lead enters the CRM above a set score threshold, a rich Slack message fires instantly to the assigned rep's channel with deal value, source, lead details, and a one-click "Claim" button that updates the CRM record.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-z"><li>Lead response time reduced from hours to minutes</li><li>Zero missed high-value lead notifications</li><li>CRM updated without reps leaving Slack</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho CRM</span><span class="mp mpz">Zapier</span><span class="mp mpg">Slack</span></div></div></div></div></div>
-<div class="mwrap" id="m7" onclick="closeBg(event,'m7')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--zap)">07 · Slack Workflow Builder</div><div class="m-h">Slack Standup Bot & Digest</div></div><div class="mx" onclick="closeM('m7')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Daily standups were either skipped, held as unnecessary meetings, or manually compiled by a team lead — wasting time and creating inconsistent records.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">A Slack bot pings each team member every morning with three standup prompts. Responses are collected and automatically posted as a single formatted digest to the team channel — giving full visibility with zero meetings.</p></div><div class="mb"><div class="mb-lbl">Key Features</div><ul class="mb-ul ul-z"><li>Scheduled morning DM to each team member</li><li>Structured prompts: done, doing, blockers</li><li>Automatic digest posted to team channel</li><li>Responses logged to Google Sheets for tracking</li><li>Non-responders flagged after deadline</li></ul></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-z"><li>Daily standup meeting eliminated</li><li>Full team visibility in one Slack message</li><li>Historical record auto-logged in Sheets</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpz">Slack Workflow Builder</span><span class="mp mpg">Google Sheets</span><span class="mp mpz">Zapier</span></div></div></div></div></div>
-<div class="mwrap" id="m9" onclick="closeBg(event,'m9')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--gold)">09 · Zoho CRM + Slack + Gmail</div><div class="m-h">Contract Renewal Alert System</div></div><div class="mx" onclick="closeM('m9')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Contract renewals were missed or handled last-minute because account managers had no proactive visibility into upcoming expiry dates.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">Automated alerts fire at 30, 14, and 7 days before each contract expires. The client receives a personalised email, the account manager gets a Slack notification with the contract summary and renewal link, and the CRM record is tagged accordingly.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-g"><li>Zero missed contract renewals</li><li>Account managers notified proactively at 3 intervals</li><li>Client communication automated and personalised</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho CRM</span><span class="mp mpzo">Zoho Flow</span><span class="mp mpg">Gmail</span><span class="mp mpg">Slack</span></div></div></div></div></div>
-<div class="mwrap" id="m10" onclick="closeBg(event,'m10')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--blue)">10 · Multi-tool Onboarding</div><div class="m-h">New Hire Onboarding Automation</div></div><div class="mx" onclick="closeM('m10')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Onboarding new hires required manual coordination across HR, IT, and team leads — with tasks frequently forgotten, delayed, or duplicated.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">When HR marks a hire as confirmed, a full onboarding sequence triggers automatically: welcome email, tool access tickets in Jira, a Slack welcome to the team channel, onboarding tasks created in the project tool, and a checklist sent to the new hire.</p></div><div class="mb"><div class="mb-lbl">Key Features</div><ul class="mb-ul ul-b"><li>Triggered by single HR status change</li><li>Welcome email with role details and first-day guide</li><li>Jira tickets for IT access and equipment requests</li><li>Slack welcome message posted to team channel</li><li>Onboarding checklist sent to new hire automatically</li></ul></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-b"><li>Onboarding tasks never missed or duplicated</li><li>HR time on manual coordination eliminated</li><li>Consistent experience for every new hire</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho CRM</span><span class="mp mpb">Jira</span><span class="mp mpz">Zapier</span><span class="mp mpg">Slack</span><span class="mp mpg">Gmail</span></div></div></div></div></div>
-<div class="mwrap" id="m13" onclick="closeBg(event,'m13')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--n8n)">13 · Analytics + Power BI + Looker</div><div class="m-h">Automated KPI Dashboard Refresh</div></div><div class="mx" onclick="closeM('m13')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Leadership dashboards were stale, manually refreshed, and often reflected last week's data rather than current performance.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">Every Monday at 8am, a scheduled workflow pulls fresh data from CRM, support, and finance tools, refreshes Zoho Analytics and Power BI dashboards, and sends a key metrics summary email to leadership — fully automated.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-n"><li>Leadership always starts the week with current data</li><li>Dashboard refresh fully automated — zero manual work</li><li>Summary email delivered before the first meeting</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho Analytics</span><span class="mp mpn">Power BI</span><span class="mp mpzo">Zoho Flow</span><span class="mp mpg">Google Looker Studio</span><span class="mp mpg">Gmail</span></div></div></div></div></div>
-<div class="mwrap" id="m15" onclick="closeBg(event,'m15')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--blue)">15 · Jira / Notion / ClickUp + Slack</div><div class="m-h">Request Intake & Project Tracking</div></div><div class="mx" onclick="closeM('m15')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Requests submitted via email or Slack were lost, untracked, and never properly assigned — leading to delays and frustrated stakeholders with no visibility into status.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">When a user submits a request via a form, email, or Slack message, it is automatically logged as a task in Jira, Notion, or ClickUp with all details pre-filled. The submitter receives an instant confirmation. When the ticket is assigned, has a due date set, or is marked complete — a Slack notification fires to the submitter and relevant team members automatically.</p></div><div class="mb"><div class="mb-lbl">Key Features</div><ul class="mb-ul ul-b"><li>Intake via Zoho Form, email, or Slack message</li><li>Auto-creates task in Jira / Notion / ClickUp with pre-filled fields</li><li>Instant confirmation sent to submitter on creation</li><li>Slack notification on assignment with assignee details</li><li>Slack notification when due date is set or changed</li><li>Slack notification when task is marked complete</li></ul></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-b"><li>Zero requests lost or untracked</li><li>Submitters always informed of status without chasing</li><li>Full audit trail in project management tool</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpg">Zoho Forms / Slack</span><span class="mp mpb">Jira / Notion / ClickUp</span><span class="mp mpn">n8n / Zapier</span><span class="mp mpg">Slack</span></div></div></div></div></div>
+<div class="mwrap" id="m5" onclick="closeBg(event,'m5')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:#5fa8d9">05 · Zoho Forms + Sheets + Slack</div><div class="m-h">Weekly Report Collection & Distribution</div></div><div class="mx" onclick="closeM('m5')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Weekly reporting was inconsistent — submissions were missed, delayed, or sent to the wrong person. Management had no visibility into who submitted on time.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">A Zoho Form captures weekly reports from staff, managers, and leaders. Data is stored in Zoho Sheets and distributed up the hierarchy on a schedule. Slack reminders fire every Friday. Late or missing submissions are tracked and escalated automatically.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-zo"><li>100% visibility into submission compliance</li><li>Fully automated distribution — zero manual forwarding</li><li>Late submissions surfaced immediately to management</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho Forms</span><span class="mp mpzo">Zoho Sheets</span><span class="mp mpzo">Zoho Flow</span><span class="mp mpg">Slack</span></div></div></div></div></div>
+<div class="mwrap" id="m6" onclick="closeBg(event,'m6')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--zap)">06 · Zoho CRM + Slack</div><div class="m-h">Slack Lead Notification Pipeline</div></div><div class="mx" onclick="closeM('m6')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Sales reps missed or delayed follow-ups because new lead notifications were buried in email or required logging into the CRM manually.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">When a new lead enters the CRM above a set score threshold, a rich Slack message fires instantly with deal value, source, lead details, and a one-click "Claim" button that updates the CRM record.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-z"><li>Lead response time reduced from hours to minutes</li><li>Zero missed high-value lead notifications</li><li>CRM updated without reps leaving Slack</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho CRM</span><span class="mp mpz">Zapier</span><span class="mp mpg">Slack</span></div></div></div></div></div>
+<div class="mwrap" id="m7" onclick="closeBg(event,'m7')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--zap)">07 · Slack Workflow Builder</div><div class="m-h">Slack Standup Bot & Digest</div></div><div class="mx" onclick="closeM('m7')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Daily standups were either skipped, held as unnecessary meetings, or manually compiled — wasting time and creating inconsistent records.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">A Slack bot pings each team member every morning with three standup prompts. Responses are collected and automatically posted as a single formatted digest to the team channel.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-z"><li>Daily standup meeting eliminated</li><li>Full team visibility in one Slack message</li><li>Historical record auto-logged in Sheets</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpz">Slack Workflow Builder</span><span class="mp mpg">Google Sheets</span><span class="mp mpz">Zapier</span></div></div></div></div></div>
+<div class="mwrap" id="m9" onclick="closeBg(event,'m9')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--gold)">09 · Zoho CRM + Slack + Gmail</div><div class="m-h">Contract Renewal Alert System</div></div><div class="mx" onclick="closeM('m9')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Contract renewals were missed or handled last-minute because account managers had no proactive visibility into upcoming expiry dates.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">Automated alerts fire at 30, 14, and 7 days before each contract expires. The client receives a personalised email, the account manager gets a Slack notification with the contract summary and renewal link.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-g"><li>Zero missed contract renewals</li><li>Account managers notified proactively at 3 intervals</li><li>Client communication automated and personalised</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho CRM</span><span class="mp mpzo">Zoho Flow</span><span class="mp mpg">Gmail</span><span class="mp mpg">Slack</span></div></div></div></div></div>
+<div class="mwrap" id="m10" onclick="closeBg(event,'m10')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--blue)">10 · Multi-tool Onboarding</div><div class="m-h">New Hire Onboarding Automation</div></div><div class="mx" onclick="closeM('m10')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Onboarding new hires required manual coordination across HR, IT, and team leads — with tasks frequently forgotten, delayed, or duplicated.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">When HR marks a hire as confirmed, a full onboarding sequence triggers: welcome email, tool access tickets in Jira, a Slack welcome, onboarding tasks, and a checklist sent to the new hire.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-b"><li>Onboarding tasks never missed or duplicated</li><li>HR time on manual coordination eliminated</li><li>Consistent experience for every new hire</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho CRM</span><span class="mp mpb">Jira</span><span class="mp mpz">Zapier</span><span class="mp mpg">Slack</span><span class="mp mpg">Gmail</span></div></div></div></div></div>
+<div class="mwrap" id="m13" onclick="closeBg(event,'m13')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--n8n)">13 · Analytics + Power BI + Looker</div><div class="m-h">Automated KPI Dashboard Refresh</div></div><div class="mx" onclick="closeM('m13')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Leadership dashboards were stale, manually refreshed, and often reflected last week's data rather than current performance.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">Every Monday at 8am, a scheduled workflow pulls fresh data from CRM, support, and finance tools, refreshes dashboards, and sends a key metrics summary email to leadership.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-n"><li>Leadership always starts the week with current data</li><li>Dashboard refresh fully automated — zero manual work</li><li>Summary email delivered before the first meeting</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho Analytics</span><span class="mp mpn">Power BI</span><span class="mp mpzo">Zoho Flow</span><span class="mp mpg">Google Looker Studio</span><span class="mp mpg">Gmail</span></div></div></div></div></div>
+<div class="mwrap" id="m15" onclick="closeBg(event,'m15')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--blue)">15 · Jira / Notion / ClickUp + Slack</div><div class="m-h">Request Intake & Project Tracking</div></div><div class="mx" onclick="closeM('m15')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Requests submitted via email or Slack were lost, untracked, and never properly assigned — leading to delays and frustrated stakeholders with no visibility into status.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">When a user submits a request via a form, email, or Slack message, it is automatically logged as a task in Jira, Notion, or ClickUp. The submitter receives an instant confirmation, and Slack notifications fire on assignment, due-date changes, and completion.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-b"><li>Zero requests lost or untracked</li><li>Submitters always informed of status without chasing</li><li>Full audit trail in project management tool</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpg">Zoho Forms / Slack</span><span class="mp mpb">Jira / Notion / ClickUp</span><span class="mp mpn">n8n / Zapier</span><span class="mp mpg">Slack</span></div></div></div></div></div>
 
 <script>
 /* ── THEME ── */
@@ -1386,7 +1436,6 @@ function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.datase
     ['ts','}'],
   ];
 
-  // Tooltips shown when hovering each completed line (by line index, 0-based)
   const lineTooltips = {
     1: '👋 That\'s me!',
     2: '📊 Product & Data Analyst',
@@ -1405,18 +1454,15 @@ function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.datase
   const container = document.getElementById('tcard-body');
   if (!container) return;
 
-  // Add scan line
   const scanline = document.createElement('div');
   scanline.className = 'tcard-scanline';
   container.appendChild(scanline);
 
-  // Add paused badge
   const pausedBadge = document.createElement('div');
   pausedBadge.className = 'tcard-paused';
   pausedBadge.textContent = '⏸ paused';
   container.appendChild(pausedBadge);
 
-  // Add skip hint
   const skipHint = document.createElement('div');
   skipHint.className = 'tcard-skip';
   skipHint.textContent = 'click to skip →';
@@ -1431,31 +1477,28 @@ function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.datase
   let done = false;
   let timer = null;
 
-  // Typo config — occasionally mistype then correct
-  // chance per character that we introduce a typo
   const TYPO_CHANCE = 0.045;
   const TYPO_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  let typoState = null; // {wrongChar, correcting}
+  let typoState = null;
 
   const cursor = document.createElement('span');
   cursor.className = 'tcursor';
 
   const CHAR_SPEED = 26;
   const LINE_PAUSE = 55;
-  const RESTART_DELAY = 3800; // pause at end before restarting
+  const RESTART_DELAY = 3800;
 
   function createLine() {
     currentLine = document.createElement('div');
     currentLine.className = 'tline';
     currentLine.dataset.lineIdx = lineCount;
-    // Add tooltip if defined for this line
     if (lineTooltips[lineCount] !== undefined) {
       const tip = document.createElement('span');
       tip.className = 'ttooltip';
       tip.textContent = lineTooltips[lineCount];
       currentLine.appendChild(tip);
     }
-    container.insertBefore(currentLine, scanline); // keep scanline on top
+    container.insertBefore(currentLine, scanline);
     lineCount++;
   }
 
@@ -1464,12 +1507,9 @@ function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.datase
     if (currentLine) currentLine.appendChild(cursor);
   }
 
-  // Skip to end instantly
   function skipToEnd() {
     if (done) return;
-    // Clear pending timer
     if (timer) clearTimeout(timer);
-    // Render all remaining tokens instantly
     while (tokenIndex < tokens.length) {
       const [cls, text] = tokens[tokenIndex];
       if (cls === 'br') {
@@ -1495,19 +1535,15 @@ function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.datase
   function finishTyping() {
     done = true;
     skipHint.style.opacity = '0';
-    // Schedule restart
     timer = setTimeout(restartTyping, RESTART_DELAY);
   }
 
   function restartTyping() {
-    // Fade out content
     container.style.transition = 'opacity .5s';
     container.style.opacity = '0';
     setTimeout(() => {
-      // Clear all tline divs
       Array.from(container.querySelectorAll('.tline')).forEach(el => el.remove());
       if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
-      // Reset state
       tokenIndex = 0; charIndex = 0;
       currentSpan = null; currentLine = null;
       lineCount = 0; done = false; typoState = null;
@@ -1518,7 +1554,6 @@ function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.datase
     }, 500);
   }
 
-  // Hover pause/resume
   container.addEventListener('mouseenter', () => {
     if (done) return;
     paused = true;
@@ -1532,7 +1567,6 @@ function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.datase
     if (!done) timer = setTimeout(typeNext, CHAR_SPEED);
   });
 
-  // Click to skip
   container.addEventListener('click', () => {
     if (done) return;
     paused = false;
@@ -1572,10 +1606,8 @@ function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.datase
       currentLine.appendChild(currentSpan);
     }
 
-    // Typo logic — only on string/key tokens, not structural chars
     if (typoState) {
       if (typoState.correcting) {
-        // Delete the wrong char
         currentSpan.textContent = currentSpan.textContent.slice(0, -1);
         typoState = null;
         moveCursor();
@@ -1587,7 +1619,6 @@ function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.datase
     const correctChar = text[charIndex];
     let charToType = correctChar;
 
-    // Maybe introduce a typo (only on letter chars, not brackets/quotes)
     if (!typoState && /[a-zA-Z]/.test(correctChar) && Math.random() < TYPO_CHANCE) {
       charToType = TYPO_CHARS[Math.floor(Math.random() * TYPO_CHARS.length)];
       typoState = { wrongChar: charToType, correcting: true };
@@ -1597,7 +1628,6 @@ function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.datase
     moveCursor();
 
     if (typoState && typoState.correcting) {
-      // Pause on wrong char before correcting
       timer = setTimeout(typeNext, CHAR_SPEED * 5);
       return;
     }
@@ -1607,7 +1637,6 @@ function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.datase
       tokenIndex++; charIndex = 0; currentSpan = null;
     }
 
-    // Slight speed variation for realism
     const speed = CHAR_SPEED + (Math.random() * 18 - 9);
     timer = setTimeout(typeNext, speed);
   }
@@ -1718,7 +1747,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelect
 /* ── SMOOTH SCROLL ── */
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
 
-/* ── 1. READING PROGRESS BAR ── */
+/* ── READING PROGRESS BAR ── */
 (function(){
   const bar = document.getElementById('progress-bar');
   function updateBar(){
@@ -1729,7 +1758,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   window.addEventListener('scroll', updateBar, {passive:true});
 })();
 
-/* ── 2. ACTIVE NAV HIGHLIGHT ── */
+/* ── ACTIVE NAV HIGHLIGHT ── */
 (function(){
   const sections = ['about','skills','work','experience','freelance'];
   const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
@@ -1746,7 +1775,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   sections.forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el)});
 })();
 
-/* ── 3. PORTFOLIO FILTER TABS ── */
+/* ── PORTFOLIO FILTER TABS ── */
 (function(){
   const btns = document.querySelectorAll('.pf-btn');
   const cards = document.querySelectorAll('.port-grid .pc');
@@ -1767,7 +1796,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   });
 })();
 
-/* ── 4. TIME SAVED TICKER ── */
+/* ── TIME SAVED TICKER ── */
 (function(){
   const targets = {hrs: 320, tasks: 1200, projects: 20};
   const els = {
@@ -1795,7 +1824,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   if(strip) obs.observe(strip);
 })();
 
-/* ── 5. AVAILABILITY BADGE (auto month) ── */
+/* ── AVAILABILITY BADGE (auto month) ── */
 (function(){
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const now = new Date();
@@ -1812,25 +1841,18 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   },{passive:true});
 })();
 
-/* ══════════════════════════════════════
-   NEW INTERACTIVE FEATURES
-══════════════════════════════════════ */
-
-/* ── 6. PAGE LOAD ANIMATION ── */
+/* ── PAGE LOAD ANIMATION ── */
 (function(){
   const loader = document.getElementById('page-loader');
   const name = document.getElementById('pl-name');
   const fill = document.getElementById('pl-fill');
   if(!loader) return;
-  // Trigger name reveal
   setTimeout(()=>{ name.classList.add('in'); }, 100);
-  // Fill bar
   setTimeout(()=>{ fill.style.width = '100%'; }, 200);
-  // Hide loader
   setTimeout(()=>{ loader.classList.add('done'); }, 900);
 })();
 
-/* ── 7. TILT CARDS ── */
+/* ── TILT CARDS ── */
 (function(){
   const cards = document.querySelectorAll('.pc');
   const MAX_TILT = 8;
@@ -1849,7 +1871,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   });
 })();
 
-/* ── 8. MAGNETIC BUTTONS ── */
+/* ── MAGNETIC BUTTONS ── */
 (function(){
   const btns = document.querySelectorAll('.btn-magnetic');
   btns.forEach(btn=>{
@@ -1865,9 +1887,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   });
 })();
 
-/* ── 9. CURSOR TRAIL ── */
+/* ── CURSOR TRAIL (desktop only) ── */
 (function(){
-  // Only on desktop
   if(window.innerWidth < 768) return;
   const dots = [];
   const COUNT = 8;
@@ -1896,7 +1917,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   animTrail();
 })();
 
-/* ── 10. TESTIMONIAL AUTO-CAROUSEL ── */
+/* ── TESTIMONIAL AUTO-CAROUSEL ── */
 (function(){
   const cards = document.querySelectorAll('.testi-card');
   const dots = document.querySelectorAll('.testi-dot');
@@ -1904,7 +1925,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   let current = 0;
   let timer;
 
-  // On mobile, show all — only carousel on wider screens
   if(window.innerWidth < 768){
     cards.forEach(c=>c.style.opacity='1');
     return;
@@ -1921,12 +1941,10 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
 
   function next(){ show((current+1) % cards.length); }
 
-  // Init
   cards.forEach((c,i)=>{
     c.style.position = i===0 ? 'relative' : 'absolute';
     c.style.top = '0'; c.style.left = '0'; c.style.width = '100%';
   });
-  // Wrap grid in relative container
   const grid = document.getElementById('testi-grid');
   if(grid) grid.style.position = 'relative';
 
@@ -1942,7 +1960,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   });
 })();
 
-/* ── 11. STATUS WIDGET ── */
+/* ── STATUS WIDGET ── */
 (function(){
   const widget = document.getElementById('status-widget');
   const timeEl = document.getElementById('sw-time');
@@ -1958,7 +1976,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   setTimeout(()=>widget.classList.add('show'), 1500);
 })();
 
-/* ── 12. EASTER EGG ── */
+/* ── EASTER EGG ── */
 (function(){
   const triggers = ['hire','shivam','hello'];
   let typed = '';
@@ -1976,7 +1994,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
       document.body.appendChild(el);
       setTimeout(()=>el.remove(), 4000);
     }
-    // Show toast
     const toast = document.createElement('div');
     toast.style.cssText = `position:fixed;top:80px;left:50%;transform:translateX(-50%);
       background:var(--blue);color:#fff;padding:12px 24px;border-radius:10px;
@@ -1997,7 +2014,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   });
 })();
 
-/* ── 13. MOBILE BOTTOM NAV active state ── */
+/* ── MOBILE BOTTOM NAV active state ── */
 (function(){
   const items = document.querySelectorAll('.mob-nav-item');
   const sections = ['hero','about','skills','work','experience','freelance'];
@@ -2011,7 +2028,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
     });
   },{threshold:0.4});
   sections.forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el)});
-  // smooth scroll
   items.forEach(a=>{
     a.addEventListener('click',e=>{
       e.preventDefault();
@@ -2021,15 +2037,15 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   });
 })();
 
-/* ── 11. NAV blur intensifies on scroll ── */
+/* ── NAV scroll shadow ── */
 (function(){
-  const nav = document.querySelector('nav');
+  const nav = document.querySelector('nav:not(#mobile-nav)');
   window.addEventListener('scroll',()=>{
-    nav.classList.toggle('scrolled', window.scrollY > 20);
+    if(nav) nav.classList.toggle('scrolled', window.scrollY > 20);
   },{passive:true});
 })();
 
-/* ── 10. BUTTON LOADING STATE ── */
+/* ── BUTTON LOADING STATE ── */
 (function(){
   const liBtn = document.querySelector('.li-btn');
   const cvBtn = document.querySelector('.dl-cv-btn');
@@ -2041,12 +2057,11 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   }
   if(liBtn) addLoading(liBtn, ()=>window.open('https://www.linkedin.com/in/shivam-gupta-automation-specialist','_blank'));
   if(cvBtn) addLoading(cvBtn, ()=>window.open('https://drive.google.com/file/d/1Z_j1pIiN8882kmlUWlmmsZFTerRa7bnP/view?usp=sharing','_blank'));
-  // Remove original onclick to avoid double-fire
   if(liBtn) liBtn.removeAttribute('onclick');
   if(cvBtn) cvBtn.removeAttribute('onclick');
 })();
 
-/* ── 14. SWIPE GESTURES on testimonials ── */
+/* ── SWIPE GESTURES on testimonials ── */
 (function(){
   const grid = document.getElementById('testi-grid');
   if(!grid) return;
@@ -2066,7 +2081,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   },{passive:true});
 })();
 
-/* ── 3. COMMAND PALETTE ── */
+/* ── COMMAND PALETTE ── */
 (function(){
   const sections = {
     'about':      {id:'about',    label:'About Me',        icon:'👤'},
@@ -2082,7 +2097,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
     'cv':         {id:'freelance',label:'Download CV',     icon:'📄'},
   };
 
-  // Create palette HTML
   const pal = document.createElement('div');
   pal.id = 'cmd-palette';
   pal.style.cssText = `
@@ -2149,7 +2163,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
     if(e.key==='Escape' && pal.style.display==='flex') closePal();
   });
 
-  // Show hint toast once
   if(!localStorage.getItem('cmd_hint')){
     setTimeout(()=>{
       const hint = document.createElement('div');
@@ -2165,6 +2178,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
     }, 3000);
   }
 })();
+
+/* ── HERO STAT ODOMETER ── */
 (function(){
   const stats = [
     {el: document.querySelector('.hsr-item:nth-child(1) .hsr-n'), target:'5+', num:5, suffix:'+'},
