@@ -61,7 +61,6 @@ img{display:block;max-width:100%}
 .mizo .d{background:var(--zoho)}.mizo{color:#5fa8d9}
 .min .d{background:var(--n8n)}.min{color:#f07090}
 .mig .d{background:var(--muted)}
-/* extra marquee colours */
 .mi-sql .d{background:#f59e0b}.mi-sql{color:#f59e0b}
 .mi-bi .d{background:#f7c948}.mi-bi{color:#f7c948}
 .mi-jira .d{background:#2684ff}.mi-jira{color:#6ba3ff}
@@ -192,10 +191,28 @@ nav{
 .tdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .tcard-title{font-size:0.7rem;color:#3a5070;margin-left:8px;font-family:'Courier New',monospace;flex:1}
 .tcard-online{font-size:0.65rem;font-weight:700;color:#22c55e;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);padding:2px 8px;border-radius:10px}
-.tcard-body{padding:16px 18px;font-family:'Courier New',monospace;font-size:0.78rem;line-height:1.9;background:#0d1525}
+.tcard-body{
+  padding:16px 18px;
+  font-family:'Courier New',monospace;
+  font-size:0.78rem;
+  line-height:1.9;
+  background:#0d1525;
+  min-height:320px; /* prevent layout jump during typing */
+}
 .tk{color:#c084fc}.tv{color:#34d399}.ts{color:#3a5070}.tstr{color:#fbbf24}.tnum{color:#f87171}
-.tcursor{display:inline-block;width:2px;height:13px;background:#22c55e;vertical-align:-2px;animation:tblink .8s step-end infinite;margin-left:1px}
+
+/* typing cursor — inline blinking block */
+.tcursor{
+  display:inline-block;
+  width:7px;height:13px;
+  background:#22c55e;
+  vertical-align:-2px;
+  animation:tblink .75s step-end infinite;
+  margin-left:1px;
+  border-radius:1px;
+}
 @keyframes tblink{0%,100%{opacity:1}50%{opacity:0}}
+
 .tcard-footer{padding:12px 16px;border-top:1px solid rgba(59,130,246,.1);background:rgba(59,130,246,.03);display:flex;flex-wrap:wrap;gap:5px}
 .tftag{font-size:0.68rem;font-weight:700;padding:3px 9px;border-radius:4px;font-family:'Nunito Sans',sans-serif;border:1px solid}
 .tf-z{color:var(--zap);background:rgba(255,74,0,.08);border-color:rgba(255,74,0,.2)}
@@ -444,18 +461,15 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
   .footer-top{grid-template-columns:1fr 1fr}
 }
 @media(max-width:640px){
-  /* nav layout on mobile: logo | clock | theme+cta */
   nav{padding:0 12px;height:56px}
   .nav-clock-wrap{position:static;transform:none;flex:1;display:flex;justify-content:center}
   .nav-links{gap:2px}
   .nav-links a:not(.nav-cta){display:none}
   .nav-cta{padding:6px 12px!important;font-size:0.73rem!important}
   .theme-btn{padding:5px 8px;margin-left:2px}
-  /* clock pill on mobile */
   .nav-clock{padding:4px 10px;font-size:0.7rem;gap:4px;letter-spacing:0}
   .nav-clock-label{display:none}
   #nav-ist-time{font-size:0.7rem}
-  /* clock dropdown — pin to top of screen, full-width friendly */
   .clock-panel{
     position:fixed;top:64px;left:50%;transform:translateX(-50%);
     min-width:260px;max-width:calc(100vw - 24px);
@@ -465,7 +479,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
   .cp-city{font-size:0.74rem;min-width:90px}
   .cp-time{font-size:0.78rem;min-width:36px}
   .cp-tz{font-size:0.58rem;min-width:56px}
-  /* other */
   .section{padding:60px 5%}
   .edu-grid,.fl-srv-grid{grid-template-columns:1fr}
   .footer-top{grid-template-columns:1fr}
@@ -479,7 +492,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
 <nav>
   <div class="nav-logo">Shivam<span>Gupta</span></div>
 
-  <!-- CENTERED INTERACTIVE CLOCK -->
   <div class="nav-clock-wrap" id="navClockWrap">
     <div class="nav-clock" id="navClock" onclick="toggleClockPanel()" title="Click to see world times">
       <span id="nav-clock-icon" style="font-size:0.85rem;line-height:1">🌙</span>
@@ -533,7 +545,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
   </div>
 </nav>
 
-<!-- MARQUEE BELOW NAV -->
+<!-- MARQUEE -->
 <div class="top-marquee">
   <div class="mtrack">
     <span class="mi mizo"><span class="d"></span>Zoho CRM</span><span class="msep">·</span>
@@ -562,7 +574,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
     <span class="mi mizo"><span class="d"></span>Zoho Flow</span><span class="msep">·</span>
     <span class="mi mi-wh"><span class="d"></span>Webhooks</span><span class="msep">·</span>
     <span class="mi mi-api"><span class="d"></span>REST APIs</span><span class="msep">·</span>
-    <!-- duplicate for seamless loop -->
+    <!-- duplicate -->
     <span class="mi mizo"><span class="d"></span>Zoho CRM</span><span class="msep">·</span>
     <span class="mi miz"><span class="d"></span>Zapier</span><span class="msep">·</span>
     <span class="mi min"><span class="d"></span>n8n</span><span class="msep">·</span>
@@ -636,26 +648,12 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
           <span class="tcard-title">shivam_gupta.json</span>
           <span class="tcard-online">● online</span>
         </div>
-        <div class="tcard-body">
-          <div><span class="ts">{</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"name"</span><span class="ts">: </span><span class="tstr">"Shivam Gupta"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"title"</span><span class="ts">: </span><span class="tstr">"Product &amp; Data Analyst"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"location"</span><span class="ts">: </span><span class="tstr">"New Delhi, India"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"experience_years"</span><span class="ts">: </span><span class="tnum">5</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"core_expertise"</span><span class="ts">: [</span></div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tstr">"Eliminate manual processes end-to-end"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tstr">"CRM architecture &amp; automation"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tstr">"Data pipelines &amp; BI dashboards"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tstr">"API &amp; webhook integrations"</span></div>
-          <div>&nbsp;&nbsp;<span class="ts">],</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"approach"</span><span class="ts">: </span><span class="tstr">"If humans do it manually, I automate it"</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"certified"</span><span class="ts">: </span><span class="tv">["AWS SAA-C03", "MBA Liverpool"]</span><span class="ts">,</span></div>
-          <div>&nbsp;&nbsp;<span class="tk">"freelance"</span><span class="ts">: </span><span class="tv">true</span></div>
-          <div><span class="ts">}</span><span class="tcursor"></span></div>
-        </div>
+        <!-- Typing animation renders here -->
+        <div class="tcard-body" id="tcard-body"></div>
+
       </div>
-    </div><!-- /hero-right -->
-  </div><!-- /hero-two-col -->
+    </div>
+  </div>
 </section>
 
 <!-- ── WHAT I DO ── -->
@@ -674,7 +672,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
     <div class="srv-card"><div class="srv-icon si-g">🔗</div><div class="srv-title">API & Webhook Integrations</div><p class="srv-body">REST API and webhook-based integrations connecting internal systems to third-party platforms for real-time data sync.</p><a class="srv-link" href="#work">See case study →</a></div>
   </div>
 
-  <!-- about me -->
   <div class="about-grid reveal" style="margin-top:60px;transition-delay:.1s">
     <div class="about-photo">SG</div>
     <div>
@@ -756,62 +753,50 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
     <p class="sec-body">Real automation solutions shipped in production. Click any card to see the full breakdown.</p>
   </div>
   <div class="port-grid">
-
     <div class="pc cz reveal" style="transition-delay:.04s" onclick="openM('m1')">
       <div class="pt" style="background:rgba(255,74,0,.06)">📄<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnz">01 · Zoho CRM</div><div class="p-title">Proposal Generation Automation</div><div class="p-desc">Eliminated 30–40 min of manual creation. Proposals generated from live CRM data in ~20 seconds.</div><div class="p-saver"><span class="ps-label">Time saved per proposal</span><span class="ps-val" data-from="40" data-to="0.33" data-unit="min">~0 min</span></div><div class="p-tags"><span class="ptag ptzo">Zoho CRM</span><span class="ptag ptzo">Deluge</span><span class="ptag ptg">Apps Script</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-
     <div class="pc cn reveal" style="transition-delay:.08s" onclick="openM('m2')">
       <div class="pt" style="background:rgba(234,75,113,.06)">🧾<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnn">02 · Google Sheets</div><div class="p-title">Automated Invoice Generation</div><div class="p-desc">Row-triggered — branded PDF invoices dispatched to clients in under 10 seconds.</div><div class="p-saver"><span class="ps-label">Time saved per invoice</span><span class="ps-val" data-from="20" data-to="0.17" data-unit="min">~0 min</span></div><div class="p-tags"><span class="ptag ptg">Apps Script</span><span class="ptag ptz">Zapier</span><span class="ptag ptg">Gmail</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-
     <div class="pc czo reveal" style="transition-delay:.12s" onclick="openM('m3')">
       <div class="pt" style="background:rgba(20,100,165,.07)">💳<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnzo">03 · Real-time Tracking</div><div class="p-title">Automated Expense Tracker</div><div class="p-desc">100% automated logging across UPI, bank transfers, credit cards, and IMPS in real time.</div><div class="p-saver"><span class="ps-label">Manual entries eliminated</span><span class="ps-val" data-from="0" data-to="100" data-unit="%">0%</span></div><div class="p-tags"><span class="ptag ptg">Apps Script</span><span class="ptag ptg">Sheets</span><span class="ptag ptg">Webhooks</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-
     <div class="pc cb reveal" style="transition-delay:.16s" onclick="openM('m4')">
       <div class="pt" style="background:rgba(37,99,235,.07)">🔔<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnb">04 · CRM + Slack</div><div class="p-title">CRM Visibility & Alert System</div><div class="p-desc">Real-time Slack alerts for lead changes, proposals, and ownership updates pushed to stakeholders.</div><div class="p-saver"><span class="ps-label">Response time reduced</span><span class="ps-val" data-from="0" data-to="80" data-unit="%">0%</span></div><div class="p-tags"><span class="ptag ptzo">Zoho CRM</span><span class="ptag ptzo">Zoho Flow</span><span class="ptag ptg">Slack</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-
     <div class="pc czo reveal" style="transition-delay:.2s" onclick="openM('m5')">
       <div class="pt" style="background:rgba(20,100,165,.07)">📋<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnzo">05 · Zoho Forms + Sheets</div><div class="p-title">Weekly Report Collection & Distribution</div><div class="p-desc">Automated report capture from staff, managers, and leaders — distributed up the chain on schedule with late-submission tracking.</div><div class="p-tags"><span class="ptag ptzo">Zoho Forms</span><span class="ptag ptzo">Zoho Sheets</span><span class="ptag ptz">Zoho Flow</span><span class="ptag ptg">Slack</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-
     <div class="pc cz reveal" style="transition-delay:.24s" onclick="openM('m6')">
       <div class="pt" style="background:rgba(255,74,0,.06)">⚡<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnz">06 · Zoho CRM + Slack</div><div class="p-title">Slack Lead Notification Pipeline</div><div class="p-desc">When a qualified lead enters the CRM, a rich Slack message fires instantly to the assigned rep with deal value, source, and a one-click claim button.</div><div class="p-tags"><span class="ptag ptzo">Zoho CRM</span><span class="ptag ptz">Zapier</span><span class="ptag ptg">Slack</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-
     <div class="pc cz reveal" style="transition-delay:.28s" onclick="openM('m7')">
       <div class="pt" style="background:rgba(255,74,0,.06)">🤖<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnz">07 · Slack Workflow Builder</div><div class="p-title">Slack Standup Bot & Digest</div><div class="p-desc">Bot pings team members each morning for standup updates. Responses are collected and posted as a single digest to the team channel — no meeting needed.</div><div class="p-tags"><span class="ptag ptz">Slack Workflow</span><span class="ptag ptg">Google Sheets</span><span class="ptag ptz">Zapier</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-
     <div class="pc cg reveal" style="transition-delay:.32s" onclick="openM('m9')">
       <div class="pt" style="background:rgba(232,160,32,.06)">🔄<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num png">09 · Zoho CRM + Slack</div><div class="p-title">Contract Renewal Alert System</div><div class="p-desc">30, 14, and 7 days before contract expiry, automated emails go to the client and Slack alerts fire to the account manager with renewal details attached.</div><div class="p-tags"><span class="ptag ptzo">Zoho CRM</span><span class="ptag ptzo">Zoho Flow</span><span class="ptag ptg">Gmail</span><span class="ptag ptg">Slack</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-
     <div class="pc cb reveal" style="transition-delay:.36s" onclick="openM('m10')">
       <div class="pt" style="background:rgba(37,99,235,.07)">🎯<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnb">10 · Multi-tool</div><div class="p-title">New Hire Onboarding Automation</div><div class="p-desc">When HR confirms a new hire, a full onboarding sequence triggers — welcome email, Jira access tickets, Slack welcome, and a task checklist — all automatically.</div><div class="p-tags"><span class="ptag ptzo">Zoho CRM</span><span class="ptag ptb">Jira</span><span class="ptag ptz">Zapier</span><span class="ptag ptg">Slack</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-
     <div class="pc cn reveal" style="transition-delay:.4s" onclick="openM('m13')">
       <div class="pt" style="background:rgba(234,75,113,.06)">📈<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnn">13 · Zoho Analytics + Power BI</div><div class="p-title">Automated KPI Dashboard Refresh</div><div class="p-desc">Every Monday at 8am, a workflow pulls data from CRM, support, and finance tools, refreshes dashboards, and sends a metric summary to leadership.</div><div class="p-tags"><span class="ptag ptzo">Zoho Analytics</span><span class="ptag ptn">Power BI</span><span class="ptag ptzo">Zoho Flow</span><span class="ptag ptg">Gmail</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-
     <div class="pc cb reveal" style="transition-delay:.44s" onclick="openM('m15')">
       <div class="pt" style="background:rgba(37,99,235,.07)">📥<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnb">15 · Jira / Notion / ClickUp</div><div class="p-title">Request Intake & Project Tracking</div><div class="p-desc">User submits a request via form or Slack. Auto-logged in Jira/Notion/ClickUp. Submitter gets instant confirmation. Slack fires on assignment, due date, and completion.</div><div class="p-tags"><span class="ptag ptg">Zoho Forms</span><span class="ptag ptb">Jira / Notion</span><span class="ptag ptn">n8n / Zapier</span><span class="ptag ptg">Slack</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-
   </div>
 </section>
 
@@ -924,28 +909,19 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
 
 <!-- MODALS -->
 <div class="mwrap" id="m1" onclick="closeBg(event,'m1')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--zap)">01 · Zoho CRM</div><div class="m-h">Proposal Generation Automation</div></div><div class="mx" onclick="closeM('m1')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Sales teams spent 30–40 minutes manually creating proposals by copying CRM data into documents, causing delays and errors that damaged client trust.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">End-to-end proposal automation triggered from Zoho CRM. Fetches live lead and deal data, builds pricing tables dynamically, generates a formatted PDF via Zoho Writer, and delivers it within seconds.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-z"><li>Proposal generated in ~20 seconds</li><li>Eliminated all manual document creation</li><li>Consistent, error-free formatting</li><li>30–40 min reclaimed per proposal</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho CRM</span><span class="mp mpzo">Zoho Writer</span><span class="mp mpzo">Deluge Functions</span><span class="mp mpg">Google Apps Script</span></div></div></div></div></div>
-
 <div class="mwrap" id="m2" onclick="closeBg(event,'m2')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--n8n)">02 · Google Sheets</div><div class="m-h">Automated Invoice Generation</div></div><div class="mx" onclick="closeM('m2')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Businesses created invoices manually from spreadsheets — time-consuming, inconsistent, and error-prone at scale.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">Row-triggered automation that validates data, calculates totals, assigns invoice numbers, generates branded PDFs, and emails them to clients.</p></div><div class="mb"><div class="mb-lbl">Key Features</div><ul class="mb-ul ul-n"><li>Row-based trigger — new or updated row</li><li>Auto-calculation of subtotal, tax, grand total</li><li>Dynamic invoice numbering & client history</li><li>Branded PDF with logo and GST/VAT fields</li><li>Optional email via Gmail or Outlook</li></ul></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-n"><li>Invoice generated in under 10 seconds</li><li>Zero manual copy-paste errors</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpg">Google Sheets</span><span class="mp mpg">Apps Script</span><span class="mp mpz">Zapier</span><span class="mp mpg">Gmail / Outlook</span></div></div></div></div></div>
-
 <div class="mwrap" id="m3" onclick="closeBg(event,'m3')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:#5fa8d9">03 · Real-time Tracking</div><div class="m-h">Automated Expense Tracker</div></div><div class="mx" onclick="closeM('m3')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Manual expense tracking across UPI, bank transfers, credit cards, and IMPS led to missed entries and poor real-time financial visibility.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">Webhooks capture transaction data in real time, log it into structured Google Sheets with auto-categorisation, and generate monthly summaries automatically.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-zo"><li>100% automated logging — zero manual entries</li><li>Unified tracking across all payment channels</li><li>Accurate monthly financial summaries</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpg">Google Apps Script</span><span class="mp mpg">Google Sheets</span><span class="mp mpg">Webhooks</span></div></div></div></div></div>
-
 <div class="mwrap" id="m4" onclick="closeBg(event,'m4')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--blue)">04 · CRM + Slack</div><div class="m-h">CRM Visibility & Alert System</div></div><div class="mx" onclick="closeM('m4')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Stakeholders had no real-time visibility into lead changes and ownership transfers — causing slow follow-ups and endless manual status checks.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">CRM automation rules fire contextual Slack and email alerts when key actions occur — deal name, owner, stage, and next action included in every message.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-b"><li>Faster follow-ups on high-priority leads</li><li>Improved accountability and ownership clarity</li><li>Near-elimination of manual status-check meetings</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho CRM</span><span class="mp mpzo">Zoho Flow</span><span class="mp mpg">Slack</span><span class="mp mpg">Email</span></div></div></div></div></div>
-
 <div class="mwrap" id="m5" onclick="closeBg(event,'m5')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:#5fa8d9">05 · Zoho Forms + Sheets + Slack</div><div class="m-h">Weekly Report Collection & Distribution</div></div><div class="mx" onclick="closeM('m5')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Weekly reporting was inconsistent — submissions were missed, delayed, or sent to the wrong person. Management had no visibility into who submitted on time.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">A Zoho Form captures weekly reports from staff, managers, and leaders. Data is stored in Zoho Sheets and distributed up the hierarchy on a schedule. Slack reminders fire every Friday. Late or missing submissions are tracked and escalated automatically to the relevant reporting manager.</p></div><div class="mb"><div class="mb-lbl">Key Features</div><ul class="mb-ul ul-zo"><li>Zoho Form captures reports from each level of the hierarchy</li><li>Auto-distribution: staff report → manager, manager report → leader, leader report → CEO</li><li>Scheduled Slack reminders every Friday before deadline</li><li>On-time / late submission tracking logged per person</li><li>Slack alert to reporting manager when submission is late or missed</li></ul></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-zo"><li>100% visibility into submission compliance</li><li>Fully automated distribution — zero manual forwarding</li><li>Late submissions surfaced immediately to management</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho Forms</span><span class="mp mpzo">Zoho Sheets</span><span class="mp mpzo">Zoho Flow</span><span class="mp mpg">Slack</span><span class="mp mpg">Scheduled Triggers</span></div></div></div></div></div>
-
 <div class="mwrap" id="m6" onclick="closeBg(event,'m6')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--zap)">06 · Zoho CRM + Slack</div><div class="m-h">Slack Lead Notification Pipeline</div></div><div class="mx" onclick="closeM('m6')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Sales reps missed or delayed follow-ups because new lead notifications were buried in email or required logging into the CRM manually.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">When a new lead enters the CRM above a set score threshold, a rich Slack message fires instantly to the assigned rep's channel with deal value, source, lead details, and a one-click "Claim" button that updates the CRM record.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-z"><li>Lead response time reduced from hours to minutes</li><li>Zero missed high-value lead notifications</li><li>CRM updated without reps leaving Slack</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho CRM</span><span class="mp mpz">Zapier</span><span class="mp mpg">Slack</span></div></div></div></div></div>
-
 <div class="mwrap" id="m7" onclick="closeBg(event,'m7')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--zap)">07 · Slack Workflow Builder</div><div class="m-h">Slack Standup Bot & Digest</div></div><div class="mx" onclick="closeM('m7')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Daily standups were either skipped, held as unnecessary meetings, or manually compiled by a team lead — wasting time and creating inconsistent records.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">A Slack bot pings each team member every morning with three standup prompts. Responses are collected and automatically posted as a single formatted digest to the team channel — giving full visibility with zero meetings.</p></div><div class="mb"><div class="mb-lbl">Key Features</div><ul class="mb-ul ul-z"><li>Scheduled morning DM to each team member</li><li>Structured prompts: done, doing, blockers</li><li>Automatic digest posted to team channel</li><li>Responses logged to Google Sheets for tracking</li><li>Non-responders flagged after deadline</li></ul></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-z"><li>Daily standup meeting eliminated</li><li>Full team visibility in one Slack message</li><li>Historical record auto-logged in Sheets</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpz">Slack Workflow Builder</span><span class="mp mpg">Google Sheets</span><span class="mp mpz">Zapier</span></div></div></div></div></div>
-
 <div class="mwrap" id="m9" onclick="closeBg(event,'m9')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--gold)">09 · Zoho CRM + Slack + Gmail</div><div class="m-h">Contract Renewal Alert System</div></div><div class="mx" onclick="closeM('m9')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Contract renewals were missed or handled last-minute because account managers had no proactive visibility into upcoming expiry dates.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">Automated alerts fire at 30, 14, and 7 days before each contract expires. The client receives a personalised email, the account manager gets a Slack notification with the contract summary and renewal link, and the CRM record is tagged accordingly.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-g"><li>Zero missed contract renewals</li><li>Account managers notified proactively at 3 intervals</li><li>Client communication automated and personalised</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho CRM</span><span class="mp mpzo">Zoho Flow</span><span class="mp mpg">Gmail</span><span class="mp mpg">Slack</span></div></div></div></div></div>
-
 <div class="mwrap" id="m10" onclick="closeBg(event,'m10')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--blue)">10 · Multi-tool Onboarding</div><div class="m-h">New Hire Onboarding Automation</div></div><div class="mx" onclick="closeM('m10')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Onboarding new hires required manual coordination across HR, IT, and team leads — with tasks frequently forgotten, delayed, or duplicated.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">When HR marks a hire as confirmed, a full onboarding sequence triggers automatically: welcome email, tool access tickets in Jira, a Slack welcome to the team channel, onboarding tasks created in the project tool, and a checklist sent to the new hire.</p></div><div class="mb"><div class="mb-lbl">Key Features</div><ul class="mb-ul ul-b"><li>Triggered by single HR status change</li><li>Welcome email with role details and first-day guide</li><li>Jira tickets for IT access and equipment requests</li><li>Slack welcome message posted to team channel</li><li>Onboarding checklist sent to new hire automatically</li></ul></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-b"><li>Onboarding tasks never missed or duplicated</li><li>HR time on manual coordination eliminated</li><li>Consistent experience for every new hire</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho CRM</span><span class="mp mpb">Jira</span><span class="mp mpz">Zapier</span><span class="mp mpg">Slack</span><span class="mp mpg">Gmail</span></div></div></div></div></div>
-
 <div class="mwrap" id="m13" onclick="closeBg(event,'m13')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--n8n)">13 · Analytics + Power BI + Looker</div><div class="m-h">Automated KPI Dashboard Refresh</div></div><div class="mx" onclick="closeM('m13')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Leadership dashboards were stale, manually refreshed, and often reflected last week's data rather than current performance.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">Every Monday at 8am, a scheduled workflow pulls fresh data from CRM, support, and finance tools, refreshes Zoho Analytics and Power BI dashboards, and sends a key metrics summary email to leadership — fully automated.</p></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-n"><li>Leadership always starts the week with current data</li><li>Dashboard refresh fully automated — zero manual work</li><li>Summary email delivered before the first meeting</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpzo">Zoho Analytics</span><span class="mp mpn">Power BI</span><span class="mp mpzo">Zoho Flow</span><span class="mp mpg">Google Looker Studio</span><span class="mp mpg">Gmail</span></div></div></div></div></div>
-
 <div class="mwrap" id="m15" onclick="closeBg(event,'m15')"><div class="modal"><div class="mhead"><div><div class="m-tag" style="color:var(--blue)">15 · Jira / Notion / ClickUp + Slack</div><div class="m-h">Request Intake & Project Tracking</div></div><div class="mx" onclick="closeM('m15')">✕</div></div><div class="mbody"><div class="mb"><div class="mb-lbl">Problem</div><p class="mb-txt">Requests submitted via email or Slack were lost, untracked, and never properly assigned — leading to delays and frustrated stakeholders with no visibility into status.</p></div><div class="mb"><div class="mb-lbl">Solution</div><p class="mb-txt">When a user submits a request via a form, email, or Slack message, it is automatically logged as a task in Jira, Notion, or ClickUp with all details pre-filled. The submitter receives an instant confirmation. When the ticket is assigned, has a due date set, or is marked complete — a Slack notification fires to the submitter and relevant team members automatically.</p></div><div class="mb"><div class="mb-lbl">Key Features</div><ul class="mb-ul ul-b"><li>Intake via Zoho Form, email, or Slack message</li><li>Auto-creates task in Jira / Notion / ClickUp with pre-filled fields</li><li>Instant confirmation sent to submitter on creation</li><li>Slack notification on assignment with assignee details</li><li>Slack notification when due date is set or changed</li><li>Slack notification when task is marked complete</li></ul></div><div class="mb"><div class="mb-lbl">Outcomes</div><ul class="mb-ul ul-b"><li>Zero requests lost or untracked</li><li>Submitters always informed of status without chasing</li><li>Full audit trail in project management tool</li></ul></div><div class="mb"><div class="mb-lbl">Stack</div><div class="mb-pills"><span class="mp mpg">Zoho Forms / Slack</span><span class="mp mpb">Jira / Notion / ClickUp</span><span class="mp mpn">n8n / Zapier</span><span class="mp mpg">Slack</span></div></div></div></div></div>
 
 <script>
+/* ── THEME ── */
 function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.dataset.theme==='dark'?'light':'dark';localStorage.setItem('theme',h.dataset.theme)}
 (function(){const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t})();
 
@@ -994,7 +970,107 @@ function toggleTheme(){const h=document.documentElement;h.dataset.theme=h.datase
   window.addEventListener('resize',resize);
 })();
 
-/* ── ANIMATED COUNTERS ON CARDS ── */
+/* ── JSON TYPING ANIMATION ── */
+(function(){
+  // Each token: [cssClass, text]
+  // cssClass: 'ts'=syntax/grey, 'tk'=purple key, 'tstr'=yellow string, 'tnum'=red number, 'tv'=green value, ''=plain
+  const tokens = [
+    ['ts','{'],['br',''],
+    ['ts','  '],['tk','"name"'],['ts',': '],['tstr','"Shivam Gupta"'],['ts',','],['br',''],
+    ['ts','  '],['tk','"title"'],['ts',': '],['tstr','"Product & Data Analyst"'],['ts',','],['br',''],
+    ['ts','  '],['tk','"location"'],['ts',': '],['tstr','"New Delhi, India"'],['ts',','],['br',''],
+    ['ts','  '],['tk','"experience_years"'],['ts',': '],['tnum','5'],['ts',','],['br',''],
+    ['ts','  '],['tk','"core_expertise"'],['ts',': ['],['br',''],
+    ['ts','    '],['tstr','"Eliminate manual processes"'],['ts',','],['br',''],
+    ['ts','    '],['tstr','"CRM architecture & automation"'],['ts',','],['br',''],
+    ['ts','    '],['tstr','"Data pipelines & BI dashboards"'],['ts',','],['br',''],
+    ['ts','    '],['tstr','"API & webhook integrations"'],['br',''],
+    ['ts','  ],'],['br',''],
+    ['ts','  '],['tk','"approach"'],['ts',': '],['tstr','"If humans do it manually, I automate it"'],['ts',','],['br',''],
+    ['ts','  '],['tk','"certified"'],['ts',': '],['tv','["AWS SAA-C03", "MBA Liverpool"]'],['ts',','],['br',''],
+    ['ts','  '],['tk','"freelance"'],['ts',': '],['tv','true'],['br',''],
+    ['ts','}'],
+  ];
+
+  const container = document.getElementById('tcard-body');
+  if (!container) return;
+
+  // Build DOM lines structure
+  // We'll render token by token with a typing delay
+  let tokenIndex = 0;
+  let charIndex = 0;
+  let currentSpan = null;
+  let currentLine = null;
+
+  function createLine() {
+    currentLine = document.createElement('div');
+    container.appendChild(currentLine);
+  }
+
+  // Add cursor element — always at end
+  const cursor = document.createElement('span');
+  cursor.className = 'tcursor';
+
+  createLine(); // first line
+
+  const CHAR_SPEED = 28; // ms per character
+  const LINE_PAUSE = 60; // extra ms after newline
+
+  function typeNext() {
+    if (tokenIndex >= tokens.length) {
+      // Done — leave cursor blinking at end
+      if (currentLine) currentLine.appendChild(cursor);
+      return;
+    }
+
+    const [cls, text] = tokens[tokenIndex];
+
+    if (cls === 'br') {
+      // Newline: start a new div
+      tokenIndex++;
+      charIndex = 0;
+      currentSpan = null;
+      createLine();
+      setTimeout(typeNext, LINE_PAUSE);
+      return;
+    }
+
+    if (text === '') {
+      tokenIndex++;
+      charIndex = 0;
+      setTimeout(typeNext, 0);
+      return;
+    }
+
+    // Create span for this token on first char
+    if (charIndex === 0) {
+      currentSpan = document.createElement('span');
+      if (cls) currentSpan.className = cls;
+      currentLine.appendChild(currentSpan);
+    }
+
+    // Type one character
+    currentSpan.textContent += text[charIndex];
+
+    // Move cursor to end of this span
+    if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
+    currentLine.appendChild(cursor);
+
+    charIndex++;
+    if (charIndex >= text.length) {
+      tokenIndex++;
+      charIndex = 0;
+      currentSpan = null;
+    }
+
+    setTimeout(typeNext, CHAR_SPEED);
+  }
+
+  // Start after a short delay so hero reveal animation plays first
+  setTimeout(typeNext, 800);
+})();
+
+/* ── ANIMATED COUNTERS ── */
 (function(){
   const counterObs=new IntersectionObserver(entries=>{
     entries.forEach(e=>{
@@ -1031,14 +1107,10 @@ function copyEmail(){
   });
 }
 
-/* IST clock & world times */
+/* ── IST CLOCK & WORLD TIMES ── */
 function tz(zone){
   const t=new Date(new Date().toLocaleString('en-US',{timeZone:zone}));
   return String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
-}
-function tzs(zone){
-  const t=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
-  return String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0')+':'+String(t.getSeconds()).padStart(2,'0');
 }
 function updateClocks(){
   const t=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
@@ -1079,17 +1151,24 @@ document.addEventListener('click',function(e){
   }
 });
 
+/* ── SCROLL REVEALS ── */
 const ro=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:0.07});
 document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
 
+/* ── SKILL BARS ── */
 const bo=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.querySelectorAll('.sk-fill').forEach(b=>b.style.width=b.dataset.w+'%');bo.unobserve(x.target)}}),{threshold:0.2});
 document.querySelectorAll('#skillsec').forEach(s=>bo.observe(s));
 
+/* ── EXPERIENCE ACCORDION ── */
 function toggleExp(id){document.getElementById(id).classList.toggle('open')}
+
+/* ── MODALS ── */
 function openM(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden'}
 function closeM(id){document.getElementById(id).classList.remove('on');document.body.style.overflow=''}
 function closeBg(e,id){if(e.target===document.getElementById(id))closeM(id)}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.mwrap.on').forEach(m=>{m.classList.remove('on');document.body.style.overflow=''})});
+
+/* ── SMOOTH SCROLL ── */
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
 </script>
 </body>
