@@ -429,22 +429,43 @@ nav{
 
 /* ── FREELANCE ── */
 #freelance{position:relative;overflow:hidden}
-.fl-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-.fl-srv-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:20px}
-.fl-srv{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:7px;font-size:0.8rem;font-weight:600;color:var(--sub);transition:all .18s}
-.fl-srv:hover{border-color:var(--blue);color:var(--text);transform:translateY(-2px)}
-.fl-srv::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+#freelance::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(37,99,235,.05) 0%,transparent 65%);top:-100px;right:-100px;pointer-events:none}
+.fl-inner{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.fl-srv-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:20px}
+.fl-srv{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:13px 16px;display:flex;align-items:center;gap:10px;
+  font-size:0.8rem;font-weight:600;color:var(--sub);
+  transition:all .22s;position:relative;overflow:hidden;
+}
+.fl-srv::before{content:'';width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .fz::before{background:var(--zap)}.fzo::before{background:var(--zoho)}.fn::before{background:var(--n8n)}.fg::before{background:var(--muted)}
-.fl-cc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px}
-.fl-cc-title{font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:18px}
-.fl-ci{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--border)}
+.fl-srv:hover{border-color:var(--blue);color:var(--text);transform:translateY(-3px);box-shadow:0 6px 20px rgba(37,99,235,.12)}
+
+/* contact card */
+.fl-cc{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.15)}
+.fl-cc-head{
+  background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(234,75,113,.05));
+  border-bottom:1px solid var(--border);
+  padding:18px 22px;display:flex;align-items:center;gap:12px;
+}
+.fl-cc-avatar{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--n8n));display:flex;align-items:center;justify-content:center;font-size:0.95rem;font-weight:800;color:#fff;flex-shrink:0}
+.fl-cc-name{font-size:0.88rem;font-weight:800;color:var(--text)}
+.fl-cc-status{display:flex;align-items:center;gap:5px;font-size:0.67rem;color:#22c55e;font-weight:600;margin-top:2px}
+.fl-cc-status-dot{width:6px;height:6px;background:#22c55e;border-radius:50%;animation:hb 2s infinite;flex-shrink:0}
+.fl-cc-body{padding:6px 22px 4px}
+.fl-ci{display:flex;align-items:center;gap:11px;padding:11px 6px;border-bottom:1px solid var(--border);border-radius:8px;transition:background .15s}
 .fl-ci:last-of-type{border-bottom:none}
-.fl-ci-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;border:1px solid var(--border)}
+.fl-ci:hover{background:var(--bg3)}
+.fl-ci-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;border:1px solid var(--border)}
 .iz{background:rgba(255,74,0,.08)}.izo{background:rgba(20,100,165,.08)}.iloc{background:rgba(234,75,113,.08)}
-.fl-ci-lbl{font-size:0.64rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
-.fl-ci-val{font-size:0.83rem;font-weight:600;color:var(--text)}
-.li-btn{width:100%;margin-top:14px;background:#0a66c2;color:#fff;border:none;border-radius:8px;padding:12px 20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Nunito Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .18s}
-.li-btn:hover{background:#085bae}
+.fl-ci-lbl{font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.fl-ci-val{font-size:0.82rem;font-weight:600;color:var(--text)}
+.fl-cc-footer{padding:16px 22px 20px;display:flex;flex-direction:column;gap:8px}
+.li-btn{width:100%;background:#0a66c2;color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Nunito Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s}
+.li-btn:hover{background:#085bae;transform:translateY(-2px);box-shadow:0 6px 20px rgba(10,102,194,.35)}
+.dl-cv-btn{width:100%;background:transparent;color:var(--text);border:1.5px solid var(--border);border-radius:10px;padding:11px 20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Nunito Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;letter-spacing:.03em;text-transform:uppercase}
+.dl-cv-btn:hover{border-color:var(--blue);color:var(--blue);background:rgba(37,99,235,.06);transform:translateY(-1px)}
 
 /* ── TESTIMONIALS ── */
 .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
@@ -510,6 +531,73 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
 .reveal{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
 .reveal.in{opacity:1;transform:translateY(0)}
 
+/* ── READING PROGRESS BAR ── */
+#progress-bar{
+  position:fixed;top:0;left:0;height:3px;width:0%;
+  background:linear-gradient(90deg,var(--blue),var(--n8n));
+  z-index:9999;transition:width .1s linear;
+  border-radius:0 2px 2px 0;
+}
+
+/* ── ACTIVE NAV ── */
+.nav-links a.nav-active{color:var(--text)!important;background:var(--bg3)!important}
+
+/* ── PORTFOLIO FILTER TABS ── */
+.port-filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px}
+.pf-btn{
+  padding:6px 14px;border-radius:20px;
+  font-size:0.73rem;font-weight:700;
+  border:1px solid var(--border);
+  background:var(--card);color:var(--sub);
+  cursor:pointer;font-family:'Nunito Sans',sans-serif;
+  transition:all .18s;
+}
+.pf-btn:hover{border-color:var(--blue);color:var(--blue)}
+.pf-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.pc{transition:all .22s,opacity .3s,transform .3s}
+.pc.hidden{display:none}
+
+/* ── TIME SAVED TICKER ── */
+.ticker-strip{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:12px;padding:18px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;margin-bottom:28px;
+}
+.ticker-label{font-size:0.72rem;color:var(--sub);text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+.ticker-val{font-size:1.6rem;font-weight:900;color:var(--blue);font-family:'Courier New',monospace;letter-spacing:-1px}
+.ticker-sub{font-size:0.68rem;color:var(--muted);margin-top:2px}
+.ticker-items{display:flex;gap:28px;flex-wrap:wrap}
+.ticker-item{text-align:center}
+
+/* ── AVAILABILITY BADGE ── */
+.avail-badge{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(34,197,94,.08);
+  border:1px solid rgba(34,197,94,.25);
+  border-radius:8px;padding:7px 12px;
+  margin-bottom:14px;
+  width:fit-content;
+}
+.avail-dot{width:8px;height:8px;background:#22c55e;border-radius:50%;flex-shrink:0;animation:hb 2s infinite}
+.avail-text{font-size:0.76rem;font-weight:700;color:#22c55e;line-height:1.3}
+.avail-sub{font-size:0.66rem;color:var(--sub);margin-top:1px;line-height:1.3}
+
+/* ── BACK TO TOP ── */
+#back-top{
+  position:fixed;bottom:24px;right:24px;
+  width:40px;height:40px;border-radius:50%;
+  background:var(--blue);color:#fff;
+  border:none;cursor:pointer;
+  font-size:1rem;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(37,99,235,.4);
+  opacity:0;pointer-events:none;
+  transition:all .25s;z-index:400;
+  font-family:'Nunito Sans',sans-serif;
+}
+#back-top.show{opacity:1;pointer-events:all}
+#back-top:hover{background:#1d4ed8;transform:translateY(-3px);box-shadow:0 8px 24px rgba(37,99,235,.5)}
+
 @media(max-width:900px){
   .hero-two-col,.fl-inner,.about-grid{grid-template-columns:1fr}
   .skills-outer{grid-template-columns:1fr}
@@ -543,6 +631,11 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
 </style>
 </head>
 <body>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"></div>
+<!-- BACK TO TOP -->
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- NAV -->
 <nav>
@@ -808,48 +901,81 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
     <h2 class="sec-title">Case Studies</h2>
     <p class="sec-body">Real automation solutions shipped in production. Click any card to see the full breakdown.</p>
   </div>
+
+  <!-- TIME SAVED TICKER -->
+  <div class="ticker-strip reveal">
+    <div>
+      <div class="ticker-label">⏱ Total time saved across all projects</div>
+      <div class="ticker-sub">Estimated hours reclaimed from manual work</div>
+    </div>
+    <div class="ticker-items">
+      <div class="ticker-item">
+        <div class="ticker-val" id="ticker-hrs">0</div>
+        <div class="ticker-sub">hrs / month</div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-val" id="ticker-tasks">0</div>
+        <div class="ticker-sub">tasks automated</div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-val" id="ticker-projects">0</div>
+        <div class="ticker-sub">projects shipped</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="port-filters reveal">
+    <button class="pf-btn active" data-filter="all">All</button>
+    <button class="pf-btn" data-filter="zoho">Zoho</button>
+    <button class="pf-btn" data-filter="zapier">Zapier</button>
+    <button class="pf-btn" data-filter="n8n">n8n</button>
+    <button class="pf-btn" data-filter="slack">Slack</button>
+    <button class="pf-btn" data-filter="data">Data / BI</button>
+  </div>
+
   <div class="port-grid">
-    <div class="pc cz reveal" style="transition-delay:.04s" onclick="openM('m1')">
+    <div class="pc cz reveal" style="transition-delay:.04s" data-tags="zoho zapier" onclick="openM('m1')">
       <div class="pt" style="background:rgba(255,74,0,.06)">📄<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnz">01 · Zoho CRM</div><div class="p-title">Proposal Generation Automation</div><div class="p-desc">Eliminated 30–40 min of manual creation. Proposals generated from live CRM data in ~20 seconds.</div><div class="p-saver"><span class="ps-label">Time saved per proposal</span><span class="ps-val" data-from="40" data-to="0.33" data-unit="min">~0 min</span></div><div class="p-tags"><span class="ptag ptzo">Zoho CRM</span><span class="ptag ptzo">Deluge</span><span class="ptag ptg">Apps Script</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-    <div class="pc cn reveal" style="transition-delay:.08s" onclick="openM('m2')">
+    <div class="pc cn reveal" style="transition-delay:.08s" data-tags="zapier" onclick="openM('m2')">
       <div class="pt" style="background:rgba(234,75,113,.06)">🧾<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnn">02 · Google Sheets</div><div class="p-title">Automated Invoice Generation</div><div class="p-desc">Row-triggered — branded PDF invoices dispatched to clients in under 10 seconds.</div><div class="p-saver"><span class="ps-label">Time saved per invoice</span><span class="ps-val" data-from="20" data-to="0.17" data-unit="min">~0 min</span></div><div class="p-tags"><span class="ptag ptg">Apps Script</span><span class="ptag ptz">Zapier</span><span class="ptag ptg">Gmail</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-    <div class="pc czo reveal" style="transition-delay:.12s" onclick="openM('m3')">
+    <div class="pc czo reveal" style="transition-delay:.12s" data-tags="zapier data" onclick="openM('m3')">
       <div class="pt" style="background:rgba(20,100,165,.07)">💳<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnzo">03 · Real-time Tracking</div><div class="p-title">Automated Expense Tracker</div><div class="p-desc">100% automated logging across UPI, bank transfers, credit cards, and IMPS in real time.</div><div class="p-saver"><span class="ps-label">Manual entries eliminated</span><span class="ps-val" data-from="0" data-to="100" data-unit="%">0%</span></div><div class="p-tags"><span class="ptag ptg">Apps Script</span><span class="ptag ptg">Sheets</span><span class="ptag ptg">Webhooks</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-    <div class="pc cb reveal" style="transition-delay:.16s" onclick="openM('m4')">
+    <div class="pc cb reveal" style="transition-delay:.16s" data-tags="zoho slack" onclick="openM('m4')">
       <div class="pt" style="background:rgba(37,99,235,.07)">🔔<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnb">04 · CRM + Slack</div><div class="p-title">CRM Visibility & Alert System</div><div class="p-desc">Real-time Slack alerts for lead changes, proposals, and ownership updates pushed to stakeholders.</div><div class="p-saver"><span class="ps-label">Response time reduced</span><span class="ps-val" data-from="0" data-to="80" data-unit="%">0%</span></div><div class="p-tags"><span class="ptag ptzo">Zoho CRM</span><span class="ptag ptzo">Zoho Flow</span><span class="ptag ptg">Slack</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-    <div class="pc czo reveal" style="transition-delay:.2s" onclick="openM('m5')">
+    <div class="pc czo reveal" style="transition-delay:.2s" data-tags="zoho slack" onclick="openM('m5')">
       <div class="pt" style="background:rgba(20,100,165,.07)">📋<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnzo">05 · Zoho Forms + Sheets</div><div class="p-title">Weekly Report Collection & Distribution</div><div class="p-desc">Automated report capture from staff, managers, and leaders — distributed up the chain on schedule with late-submission tracking.</div><div class="p-tags"><span class="ptag ptzo">Zoho Forms</span><span class="ptag ptzo">Zoho Sheets</span><span class="ptag ptz">Zoho Flow</span><span class="ptag ptg">Slack</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-    <div class="pc cz reveal" style="transition-delay:.24s" onclick="openM('m6')">
+    <div class="pc cz reveal" style="transition-delay:.24s" data-tags="zoho zapier slack" onclick="openM('m6')">
       <div class="pt" style="background:rgba(255,74,0,.06)">⚡<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnz">06 · Zoho CRM + Slack</div><div class="p-title">Slack Lead Notification Pipeline</div><div class="p-desc">When a qualified lead enters the CRM, a rich Slack message fires instantly to the assigned rep with deal value, source, and a one-click claim button.</div><div class="p-tags"><span class="ptag ptzo">Zoho CRM</span><span class="ptag ptz">Zapier</span><span class="ptag ptg">Slack</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-    <div class="pc cz reveal" style="transition-delay:.28s" onclick="openM('m7')">
+    <div class="pc cz reveal" style="transition-delay:.28s" data-tags="slack zapier" onclick="openM('m7')">
       <div class="pt" style="background:rgba(255,74,0,.06)">🤖<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnz">07 · Slack Workflow Builder</div><div class="p-title">Slack Standup Bot & Digest</div><div class="p-desc">Bot pings team members each morning for standup updates. Responses are collected and posted as a single digest to the team channel — no meeting needed.</div><div class="p-tags"><span class="ptag ptz">Slack Workflow</span><span class="ptag ptg">Google Sheets</span><span class="ptag ptz">Zapier</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-    <div class="pc cg reveal" style="transition-delay:.32s" onclick="openM('m9')">
+    <div class="pc cg reveal" style="transition-delay:.32s" data-tags="zoho slack" onclick="openM('m9')">
       <div class="pt" style="background:rgba(232,160,32,.06)">🔄<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num png">09 · Zoho CRM + Slack</div><div class="p-title">Contract Renewal Alert System</div><div class="p-desc">30, 14, and 7 days before contract expiry, automated emails go to the client and Slack alerts fire to the account manager with renewal details attached.</div><div class="p-tags"><span class="ptag ptzo">Zoho CRM</span><span class="ptag ptzo">Zoho Flow</span><span class="ptag ptg">Gmail</span><span class="ptag ptg">Slack</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-    <div class="pc cb reveal" style="transition-delay:.36s" onclick="openM('m10')">
+    <div class="pc cb reveal" style="transition-delay:.36s" data-tags="zoho zapier slack" onclick="openM('m10')">
       <div class="pt" style="background:rgba(37,99,235,.07)">🎯<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnb">10 · Multi-tool</div><div class="p-title">New Hire Onboarding Automation</div><div class="p-desc">When HR confirms a new hire, a full onboarding sequence triggers — welcome email, Jira access tickets, Slack welcome, and a task checklist — all automatically.</div><div class="p-tags"><span class="ptag ptzo">Zoho CRM</span><span class="ptag ptb">Jira</span><span class="ptag ptz">Zapier</span><span class="ptag ptg">Slack</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-    <div class="pc cn reveal" style="transition-delay:.4s" onclick="openM('m13')">
+    <div class="pc cn reveal" style="transition-delay:.4s" data-tags="zoho data" onclick="openM('m13')">
       <div class="pt" style="background:rgba(234,75,113,.06)">📈<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnn">13 · Zoho Analytics + Power BI</div><div class="p-title">Automated KPI Dashboard Refresh</div><div class="p-desc">Every Monday at 8am, a workflow pulls data from CRM, support, and finance tools, refreshes dashboards, and sends a metric summary to leadership.</div><div class="p-tags"><span class="ptag ptzo">Zoho Analytics</span><span class="ptag ptn">Power BI</span><span class="ptag ptzo">Zoho Flow</span><span class="ptag ptg">Gmail</span></div><div class="p-visit">View details ↗</div></div>
     </div>
-    <div class="pc cb reveal" style="transition-delay:.44s" onclick="openM('m15')">
+    <div class="pc cb reveal" style="transition-delay:.44s" data-tags="n8n zapier slack" onclick="openM('m15')">
       <div class="pt" style="background:rgba(37,99,235,.07)">📥<span class="pt-lbl">Click to expand</span></div>
       <div class="pb"><div class="p-num pnb">15 · Jira / Notion / ClickUp</div><div class="p-title">Request Intake & Project Tracking</div><div class="p-desc">User submits a request via form or Slack. Auto-logged in Jira/Notion/ClickUp. Submitter gets instant confirmation. Slack fires on assignment, due date, and completion.</div><div class="p-tags"><span class="ptag ptg">Zoho Forms</span><span class="ptag ptb">Jira / Notion</span><span class="ptag ptn">n8n / Zapier</span><span class="ptag ptg">Slack</span></div><div class="p-visit">View details ↗</div></div>
     </div>
@@ -908,8 +1034,15 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
 <!-- ── FREELANCE ── -->
 <section id="freelance" class="section section-alt">
   <div class="fl-inner">
-    <div class="reveal">
-      <p class="tag">Available Now</p>
+    <div class="reveal" style="align-self:start">
+      <p class="tag" style="margin-bottom:10px">Available Now</p>
+      <div class="avail-badge" style="margin-bottom:18px">
+        <span class="avail-dot"></span>
+        <div>
+          <div class="avail-text">Available for new projects</div>
+          <div class="avail-sub" id="avail-month">Taking on work from May 2026</div>
+        </div>
+      </div>
       <h2 class="sec-title">I Also Take On<br>Freelance Projects</h2>
       <p class="sec-body">Need a Zoho CRM set up, a Zapier automation built, or an n8n workflow designed from scratch? Available for short-term and part-time engagements — from quick integrations to full end-to-end builds.</p>
       <div class="fl-srv-grid">
@@ -926,12 +1059,22 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
       </div>
     </div>
     <div class="fl-cc reveal" style="transition-delay:.1s">
-      <div class="fl-cc-title">Get In Touch</div>
-      <div class="fl-ci"><div class="fl-ci-icon iz">✉️</div><div style="flex:1"><div class="fl-ci-lbl">Email</div><div class="fl-ci-val" style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">shivam9650gupta@gmail.com<button class="copy-email-btn" id="copyEmailBtn" onclick="copyEmail()">📋 Copy</button></div></div></div>
-      <div class="fl-ci"><div class="fl-ci-icon izo">📞</div><div><div class="fl-ci-lbl">Phone</div><div class="fl-ci-val">+91 9650486588</div></div></div>
-      <div class="fl-ci"><div class="fl-ci-icon iloc">📍</div><div><div class="fl-ci-lbl">Location</div><div class="fl-ci-val">New Delhi, India · IST</div></div></div>
-      <button class="li-btn" onclick="window.open('https://www.linkedin.com/in/shivam-gupta-automation-specialist','_blank')">Connect on LinkedIn ↗</button>
-      <button class="dl-cv-btn" onclick="window.open('https://drive.google.com/file/d/1Z_j1pIiN8882kmlUWlmmsZFTerRa7bnP/view?usp=sharing','_blank')">⬇ Download CV / Resume</button>
+      <div class="fl-cc-head">
+        <div class="fl-cc-avatar">SG</div>
+        <div>
+          <div class="fl-cc-name">Shivam Gupta</div>
+          <div class="fl-cc-status"><span class="fl-cc-status-dot"></span>Online · Ready to help</div>
+        </div>
+      </div>
+      <div class="fl-cc-body">
+        <div class="fl-ci"><div class="fl-ci-icon iz">✉️</div><div style="flex:1"><div class="fl-ci-lbl">Email</div><div class="fl-ci-val" style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">shivam9650gupta@gmail.com<button class="copy-email-btn" id="copyEmailBtn" onclick="copyEmail()">📋 Copy</button></div></div></div>
+        <div class="fl-ci"><div class="fl-ci-icon izo">📞</div><div><div class="fl-ci-lbl">Phone</div><div class="fl-ci-val">+91 9650486588</div></div></div>
+        <div class="fl-ci"><div class="fl-ci-icon iloc">📍</div><div><div class="fl-ci-lbl">Location</div><div class="fl-ci-val">New Delhi, India · IST</div></div></div>
+      </div>
+      <div class="fl-cc-footer">
+        <button class="li-btn" onclick="window.open('https://www.linkedin.com/in/shivam-gupta-automation-specialist','_blank')">Connect on LinkedIn ↗</button>
+        <button class="dl-cv-btn" onclick="window.open('https://drive.google.com/file/d/1Z_j1pIiN8882kmlUWlmmsZFTerRa7bnP/view?usp=sharing','_blank')">⬇ Download CV / Resume</button>
+      </div>
     </div>
   </div>
 </section>
@@ -1377,6 +1520,100 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelect
 
 /* ── SMOOTH SCROLL ── */
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
+
+/* ── 1. READING PROGRESS BAR ── */
+(function(){
+  const bar = document.getElementById('progress-bar');
+  function updateBar(){
+    const scrollTop = window.scrollY;
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (scrollTop / docH * 100) + '%';
+  }
+  window.addEventListener('scroll', updateBar, {passive:true});
+})();
+
+/* ── 2. ACTIVE NAV HIGHLIGHT ── */
+(function(){
+  const sections = ['about','skills','work','experience','freelance'];
+  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        navLinks.forEach(a=>a.classList.remove('nav-active'));
+        const id = e.target.id;
+        const active = document.querySelector(`.nav-links a[href="#${id}"]`);
+        if(active) active.classList.add('nav-active');
+      }
+    });
+  },{threshold:0.3,rootMargin:'-60px 0px -40% 0px'});
+  sections.forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el)});
+})();
+
+/* ── 3. PORTFOLIO FILTER TABS ── */
+(function(){
+  const btns = document.querySelectorAll('.pf-btn');
+  const cards = document.querySelectorAll('.port-grid .pc');
+  btns.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      btns.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      cards.forEach(card=>{
+        if(filter === 'all'){
+          card.classList.remove('hidden');
+        } else {
+          const tags = (card.dataset.tags || '').split(' ');
+          tags.includes(filter) ? card.classList.remove('hidden') : card.classList.add('hidden');
+        }
+      });
+    });
+  });
+})();
+
+/* ── 4. TIME SAVED TICKER ── */
+(function(){
+  const targets = {hrs: 320, tasks: 1200, projects: 20};
+  const els = {
+    hrs: document.getElementById('ticker-hrs'),
+    tasks: document.getElementById('ticker-tasks'),
+    projects: document.getElementById('ticker-projects')
+  };
+  let started = false;
+  const obs = new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting && !started){
+      started = true;
+      const dur = 1800, start = performance.now();
+      function step(now){
+        const p = Math.min((now - start) / dur, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        if(els.hrs) els.hrs.textContent = Math.round(targets.hrs * ease).toLocaleString();
+        if(els.tasks) els.tasks.textContent = Math.round(targets.tasks * ease).toLocaleString();
+        if(els.projects) els.projects.textContent = p >= 1 ? '20+' : Math.round(targets.projects * ease);
+        if(p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+  },{threshold:0.4});
+  const strip = document.querySelector('.ticker-strip');
+  if(strip) obs.observe(strip);
+})();
+
+/* ── 5. AVAILABILITY BADGE (auto month) ── */
+(function(){
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const now = new Date();
+  const monthStr = months[now.getMonth()] + ' ' + now.getFullYear();
+  const el = document.getElementById('avail-month');
+  if(el) el.textContent = 'Taking on work from ' + monthStr;
+})();
+
+/* ── BACK TO TOP ── */
+(function(){
+  const btn = document.getElementById('back-top');
+  window.addEventListener('scroll',()=>{
+    btn.classList.toggle('show', window.scrollY > 400);
+  },{passive:true});
+})();
 </script>
 </body>
 </html>
