@@ -539,8 +539,83 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
   border-radius:0 2px 2px 0;
 }
 
-/* ── ACTIVE NAV ── */
-.nav-links a.nav-active{color:var(--text)!important;background:var(--bg3)!important}
+/* ── TILT CARDS ── */
+.pc{transform-style:preserve-3d;will-change:transform}
+
+/* ── MAGNETIC BTN ── */
+.btn-magnetic{transition:transform .2s cubic-bezier(.23,1,.32,1),box-shadow .2s}
+
+/* ── CURSOR TRAIL ── */
+.cursor-dot{
+  position:fixed;width:6px;height:6px;border-radius:50%;
+  background:var(--blue);pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);opacity:0;
+  transition:opacity .3s;
+}
+
+/* ── TESTIMONIAL CAROUSEL ── */
+.testi-grid{position:relative}
+.testi-card{transition:opacity .5s ease,transform .5s ease}
+.testi-card.tc-hidden{opacity:0;pointer-events:none;position:absolute;top:0;transform:translateY(10px)}
+.testi-card.tc-active{opacity:1;transform:translateY(0)}
+.testi-dots{display:flex;justify-content:center;gap:7px;margin-top:18px}
+.testi-dot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .25s;border:none;padding:0}
+.testi-dot.active{background:var(--blue);width:20px;border-radius:4px}
+
+/* ── STATUS WIDGET ── */
+#status-widget{
+  position:fixed;bottom:24px;left:24px;z-index:400;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:10px 14px;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 8px 28px rgba(0,0,0,.25);
+  font-family:'Nunito Sans',sans-serif;
+  opacity:0;transform:translateY(10px);
+  transition:all .4s cubic-bezier(.23,1,.32,1);
+  cursor:default;max-width:240px;
+}
+#status-widget.show{opacity:1;transform:translateY(0)}
+#status-widget:hover{border-color:var(--blue);box-shadow:0 8px 28px rgba(37,99,235,.15)}
+.sw-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:hb 2s infinite}
+.sw-text{font-size:0.7rem;font-weight:700;color:var(--text);line-height:1.3}
+.sw-sub{font-size:0.62rem;color:var(--muted);margin-top:1px}
+
+/* ── PAGE LOAD ANIMATION ── */
+#page-loader{
+  position:fixed;inset:0;z-index:10000;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;
+  transition:opacity .5s ease,visibility .5s ease;
+}
+#page-loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.pl-name{font-size:2rem;font-weight:900;color:var(--text);letter-spacing:-1px;opacity:0;transform:translateY(16px);transition:all .5s cubic-bezier(.23,1,.32,1)}
+.pl-name span{color:var(--blue)}
+.pl-name.in{opacity:1;transform:translateY(0)}
+.pl-bar{width:120px;height:2px;background:var(--border);border-radius:2px;overflow:hidden}
+.pl-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--n8n));border-radius:2px;transition:width .6s cubic-bezier(.23,1,.32,1)}
+
+/* ── MODAL SPRING ── */
+.modal{animation:mspring .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes mspring{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* ── CONFETTI ── */
+.confetti-piece{
+  position:fixed;width:8px;height:8px;border-radius:2px;
+  pointer-events:none;z-index:9998;
+  animation:confettiFall linear forwards;
+}
+@keyframes confettiFall{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+}
+
+/* ── ODOMETER HERO STATS ── */
+.hsr-n{transition:all .1s}
+
+@media(max-width:640px){
+  #status-widget{display:none}
+}
 
 /* ── PORTFOLIO FILTER TABS ── */
 .port-filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px}
@@ -631,6 +706,21 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
 </style>
 </head>
 <body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+  <div class="pl-name" id="pl-name">Shivam<span>Gupta</span></div>
+  <div class="pl-bar"><div class="pl-bar-fill" id="pl-fill"></div></div>
+</div>
+
+<!-- STATUS WIDGET -->
+<div id="status-widget">
+  <div class="sw-dot"></div>
+  <div>
+    <div class="sw-text">🟢 Open to work</div>
+    <div class="sw-sub" id="sw-time">New Delhi · --:-- IST</div>
+  </div>
+</div>
 
 <!-- PROGRESS BAR -->
 <div id="progress-bar"></div>
@@ -763,8 +853,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
       <h1>The Analyst Who<br><span class="acc">Actually Builds</span><br>The Automation</h1>
       <p class="hero-sub">5+ years designing CRM workflows, data pipelines, and end-to-end automations using Zoho, Zapier, n8n, Power BI and SQL. I make manual processes disappear — permanently.</p>
       <div class="hero-btns">
-        <a class="btn btn-primary" href="#work">View My Work</a>
-        <a class="btn btn-ghost btn-hire" href="#freelance">Hire Me <span class="hire-arrow">→</span></a>
+        <a class="btn btn-primary btn-magnetic" href="#work">View My Work</a>
+        <a class="btn btn-ghost btn-hire btn-magnetic" href="#freelance">Hire Me <span class="hire-arrow">→</span></a>
       </div>
       <div class="hero-stats-row">
         <div class="hsr-item">
@@ -1082,10 +1172,15 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 5% 
 <!-- ── TESTIMONIALS ── -->
 <section class="section section-dark">
   <div class="reveal"><p class="tag">Testimonials</p><h2 class="sec-title">What People Say</h2></div>
-  <div class="testi-grid">
-    <div class="testi-card reveal" style="transition-delay:.05s"><div class="stars">★★★★★</div><div class="testi-text">"Shivam built our entire Zoho CRM automation from scratch. Proposals that used to take 40 minutes now go out in seconds. Absolutely transformed how our sales team operates."</div><div class="testi-author">Sales Manager</div><div class="testi-loc">B2B SaaS Company · India</div></div>
-    <div class="testi-card reveal" style="transition-delay:.1s"><div class="stars">★★★★★</div><div class="testi-text">"The n8n workflow he built connects our CRM, Slack, and invoicing in one seamless flow. Zero manual work. The ROI was obvious within the first week."</div><div class="testi-author">Operations Lead</div><div class="testi-loc">Marketing Agency · Delhi</div></div>
-    <div class="testi-card reveal" style="transition-delay:.15s"><div class="stars">★★★★★</div><div class="testi-text">"Deep Zoho knowledge, fast communication, and everything delivered exactly as scoped. Would hire again without hesitation for any automation project."</div><div class="testi-author">Founder</div><div class="testi-loc">Freelance Client</div></div>
+  <div class="testi-grid" id="testi-grid">
+    <div class="testi-card" data-testi="0"><div class="stars">★★★★★</div><div class="testi-text">"Shivam built our entire Zoho CRM automation from scratch. Proposals that used to take 40 minutes now go out in seconds. Absolutely transformed how our sales team operates."</div><div class="testi-author">Sales Manager</div><div class="testi-loc">B2B SaaS Company · India</div></div>
+    <div class="testi-card" data-testi="1"><div class="stars">★★★★★</div><div class="testi-text">"The n8n workflow he built connects our CRM, Slack, and invoicing in one seamless flow. Zero manual work. The ROI was obvious within the first week."</div><div class="testi-author">Operations Lead</div><div class="testi-loc">Marketing Agency · Delhi</div></div>
+    <div class="testi-card" data-testi="2"><div class="stars">★★★★★</div><div class="testi-text">"Deep Zoho knowledge, fast communication, and everything delivered exactly as scoped. Would hire again without hesitation for any automation project."</div><div class="testi-author">Founder</div><div class="testi-loc">Freelance Client</div></div>
+  </div>
+  <div class="testi-dots" id="testi-dots">
+    <button class="testi-dot active" data-idx="0"></button>
+    <button class="testi-dot" data-idx="1"></button>
+    <button class="testi-dot" data-idx="2"></button>
   </div>
 </section>
 
@@ -1613,6 +1708,218 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   window.addEventListener('scroll',()=>{
     btn.classList.toggle('show', window.scrollY > 400);
   },{passive:true});
+})();
+
+/* ══════════════════════════════════════
+   NEW INTERACTIVE FEATURES
+══════════════════════════════════════ */
+
+/* ── 6. PAGE LOAD ANIMATION ── */
+(function(){
+  const loader = document.getElementById('page-loader');
+  const name = document.getElementById('pl-name');
+  const fill = document.getElementById('pl-fill');
+  if(!loader) return;
+  // Trigger name reveal
+  setTimeout(()=>{ name.classList.add('in'); }, 100);
+  // Fill bar
+  setTimeout(()=>{ fill.style.width = '100%'; }, 200);
+  // Hide loader
+  setTimeout(()=>{ loader.classList.add('done'); }, 900);
+})();
+
+/* ── 7. TILT CARDS ── */
+(function(){
+  const cards = document.querySelectorAll('.pc');
+  const MAX_TILT = 8;
+  cards.forEach(card=>{
+    card.addEventListener('mousemove', e=>{
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      card.style.transform = `perspective(600px) rotateY(${x * MAX_TILT}deg) rotateX(${-y * MAX_TILT}deg) translateY(-4px) scale(1.02)`;
+      card.style.boxShadow = `${-x*12}px ${-y*12}px 32px rgba(37,99,235,.15)`;
+    });
+    card.addEventListener('mouseleave', ()=>{
+      card.style.transform = '';
+      card.style.boxShadow = '';
+    });
+  });
+})();
+
+/* ── 8. MAGNETIC BUTTONS ── */
+(function(){
+  const btns = document.querySelectorAll('.btn-magnetic');
+  btns.forEach(btn=>{
+    btn.addEventListener('mousemove', e=>{
+      const r = btn.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width/2) * 0.3;
+      const y = (e.clientY - r.top - r.height/2) * 0.3;
+      btn.style.transform = `translate(${x}px,${y}px)`;
+    });
+    btn.addEventListener('mouseleave', ()=>{
+      btn.style.transform = '';
+    });
+  });
+})();
+
+/* ── 9. CURSOR TRAIL ── */
+(function(){
+  // Only on desktop
+  if(window.innerWidth < 768) return;
+  const dots = [];
+  const COUNT = 8;
+  for(let i=0; i<COUNT; i++){
+    const d = document.createElement('div');
+    d.className = 'cursor-dot';
+    d.style.opacity = (1 - i/COUNT) * 0.6;
+    d.style.width = d.style.height = (6 - i*0.5) + 'px';
+    document.body.appendChild(d);
+    dots.push({el:d, x:0, y:0});
+  }
+  let mx=0, my=0;
+  document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; dots[0].el.style.opacity='0.7'; });
+  function animTrail(){
+    let px=mx, py=my;
+    dots.forEach((d,i)=>{
+      const ease = i===0 ? 1 : 0.35;
+      d.x += (px - d.x) * ease;
+      d.y += (py - d.y) * ease;
+      d.el.style.left = d.x + 'px';
+      d.el.style.top = d.y + 'px';
+      if(i<dots.length-1){ px=d.x; py=d.y; }
+    });
+    requestAnimationFrame(animTrail);
+  }
+  animTrail();
+})();
+
+/* ── 10. TESTIMONIAL AUTO-CAROUSEL ── */
+(function(){
+  const cards = document.querySelectorAll('.testi-card');
+  const dots = document.querySelectorAll('.testi-dot');
+  if(cards.length < 2) return;
+  let current = 0;
+  let timer;
+
+  // On mobile, show all — only carousel on wider screens
+  if(window.innerWidth < 768){
+    cards.forEach(c=>c.style.opacity='1');
+    return;
+  }
+
+  function show(idx){
+    cards.forEach((c,i)=>{
+      c.classList.toggle('tc-hidden', i!==idx);
+      c.classList.toggle('tc-active', i===idx);
+    });
+    dots.forEach((d,i)=>d.classList.toggle('active', i===idx));
+    current = idx;
+  }
+
+  function next(){ show((current+1) % cards.length); }
+
+  // Init
+  cards.forEach((c,i)=>{
+    c.style.position = i===0 ? 'relative' : 'absolute';
+    c.style.top = '0'; c.style.left = '0'; c.style.width = '100%';
+  });
+  // Wrap grid in relative container
+  const grid = document.getElementById('testi-grid');
+  if(grid) grid.style.position = 'relative';
+
+  show(0);
+  timer = setInterval(next, 4000);
+
+  dots.forEach(d=>{
+    d.addEventListener('click',()=>{
+      clearInterval(timer);
+      show(parseInt(d.dataset.idx));
+      timer = setInterval(next, 4000);
+    });
+  });
+})();
+
+/* ── 11. STATUS WIDGET ── */
+(function(){
+  const widget = document.getElementById('status-widget');
+  const timeEl = document.getElementById('sw-time');
+  if(!widget) return;
+  function updateSwTime(){
+    const t = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
+    const h = String(t.getHours()).padStart(2,'0');
+    const m = String(t.getMinutes()).padStart(2,'0');
+    if(timeEl) timeEl.textContent = `New Delhi · ${h}:${m} IST`;
+  }
+  updateSwTime();
+  setInterval(updateSwTime, 60000);
+  setTimeout(()=>widget.classList.add('show'), 1500);
+})();
+
+/* ── 12. EASTER EGG ── */
+(function(){
+  const triggers = ['hire','shivam','hello'];
+  let typed = '';
+  function fireConfetti(){
+    const colors = ['#2563eb','#ea4b71','#fbbf24','#22c55e','#c084fc','#f87171'];
+    for(let i=0;i<80;i++){
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.left = Math.random()*100 + 'vw';
+      el.style.background = colors[Math.floor(Math.random()*colors.length)];
+      el.style.width = el.style.height = (6+Math.random()*8)+'px';
+      el.style.borderRadius = Math.random()>0.5 ? '50%' : '2px';
+      el.style.animationDuration = (1.5+Math.random()*2)+'s';
+      el.style.animationDelay = (Math.random()*0.5)+'s';
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(), 4000);
+    }
+    // Show toast
+    const toast = document.createElement('div');
+    toast.style.cssText = `position:fixed;top:80px;left:50%;transform:translateX(-50%);
+      background:var(--blue);color:#fff;padding:12px 24px;border-radius:10px;
+      font-family:'Nunito Sans',sans-serif;font-size:0.85rem;font-weight:700;
+      z-index:9999;box-shadow:0 8px 28px rgba(37,99,235,.4);
+      animation:mfade .3s ease;white-space:nowrap;`;
+    toast.textContent = '🎉 Hey! Let\'s build something great together →';
+    document.body.appendChild(toast);
+    setTimeout(()=>toast.remove(), 3500);
+  }
+  document.addEventListener('keydown', e=>{
+    typed += e.key.toLowerCase();
+    if(typed.length > 10) typed = typed.slice(-10);
+    if(triggers.some(t=>typed.includes(t))){
+      typed = '';
+      fireConfetti();
+    }
+  });
+})();
+
+/* ── 13. HERO STAT ODOMETER ── */
+(function(){
+  const stats = [
+    {el: document.querySelector('.hsr-item:nth-child(1) .hsr-n'), target:'5+', num:5, suffix:'+'},
+    {el: document.querySelector('.hsr-item:nth-child(3) .hsr-n'), target:'3', num:3, suffix:''},
+  ];
+  let started = false;
+  const hero = document.getElementById('hero');
+  if(!hero) return;
+  const obs = new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting && !started){
+      started = true;
+      stats.forEach(s=>{
+        if(!s.el) return;
+        let frame=0; const total=40;
+        const iv = setInterval(()=>{
+          frame++;
+          const val = Math.ceil(s.num * frame/total);
+          s.el.textContent = val + (frame>=total ? s.suffix : '');
+          if(frame>=total) clearInterval(iv);
+        },30);
+      });
+    }
+  },{threshold:0.5});
+  obs.observe(hero);
 })();
 </script>
 </body>
