@@ -301,7 +301,7 @@ body::after{content:'';position:fixed;inset:0;opacity:.018;pointer-events:none;z
 @media(max-width:640px){.testi-swipe-hint{display:block}}
 .btn-magnetic{transition:transform .2s cubic-bezier(.23,1,.32,1),box-shadow .2s}
 .cursor-dot{position:fixed;width:6px;height:6px;border-radius:50%;background:var(--blue);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);opacity:0;transition:opacity .3s;}
-@media(max-width:640px){#status-widget{display:none}#mobile-nav{display:none}body{padding-top:130px;padding-bottom:20px}#back-top{bottom:24px}}
+@media(max-width:640px){#status-widget{display:none}#mobile-nav{display:none}body{padding-top:130px;padding-bottom:20px}#back-top{bottom:24px}.top-marquee{display:none}}
 @media(max-width:900px){.hero-two-col,.fl-inner,.about-grid{grid-template-columns:1fr}.skills-outer{grid-template-columns:1fr}.footer-top{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){nav{display:none}.section{padding:60px 5%}.edu-grid,.fl-srv-grid{grid-template-columns:1fr}.footer-top{grid-template-columns:1fr}.clock-panel{position:fixed;top:130px;left:50%;transform:translateX(-50%);min-width:260px;max-width:calc(100vw - 24px);}}
 
@@ -338,10 +338,22 @@ body::after{content:'';position:fixed;inset:0;opacity:.018;pointer-events:none;z
   <!-- Row 2: logo · clock · theme -->
   <div class="mob-row2">
     <div class="mob-row2-logo">Shivam<span>Gupta</span></div>
-    <div class="mob-row2-clock" onclick="toggleClockPanel()">
-      <span class="mob-row2-clock-dot"></span>
-      <span id="mob-ist-time">--:--</span>
-      <span style="font-size:0.6rem;color:var(--muted)">IST</span>
+    <div class="nav-clock-wrap" id="mobClockWrap" style="position:static;transform:none;">
+      <div class="nav-clock" id="mobNavClock" onclick="toggleMobClockPanel()" title="Click for world times">
+        <span id="mob-clock-icon" style="font-size:0.85rem;line-height:1">&#127769;</span>
+        <span id="mob-ist-time">--:--:--</span>
+        <span class="nav-clock-label">IST</span>
+        <span class="nav-clock-chevron" id="mobClockChevron">&#9662;</span>
+      </div>
+      <div class="clock-panel" id="mobClockPanel" style="top:calc(100% + 4px);left:0;transform:none;right:0;min-width:unset;">
+        <div class="cp-title">World Clocks</div>
+        <div class="cp-row"><span class="cp-city">&#127470;&#127475; New Delhi</span><span class="cp-time" id="mcp-ist">--:--</span><span class="cp-tz">IST UTC+5:30</span></div>
+        <div class="cp-row"><span class="cp-city">&#127468;&#127463; London</span><span class="cp-time" id="mcp-lon">--:--</span><span class="cp-tz">BST</span></div>
+        <div class="cp-row"><span class="cp-city">&#127482;&#127480; New York</span><span class="cp-time" id="mcp-nyc">--:--</span><span class="cp-tz">EDT</span></div>
+        <div class="cp-row"><span class="cp-city">&#127462;&#127466; Dubai</span><span class="cp-time" id="mcp-dxb">--:--</span><span class="cp-tz">GST UTC+4</span></div>
+        <div class="cp-row"><span class="cp-city">&#127480;&#127468; Singapore</span><span class="cp-time" id="mcp-sgp">--:--</span><span class="cp-tz">SGT UTC+8</span></div>
+        <div class="cp-row"><span class="cp-city">&#127464;&#127462; Toronto</span><span class="cp-time" id="mcp-can">--:--</span><span class="cp-tz">EDT UTC-4</span></div>
+      </div>
     </div>
     <button class="mob-theme-btn" onclick="toggleTheme()"><span class="sun">&#9728;&#65039;</span><span class="moon">&#127769;</span></button>
   </div>
@@ -921,14 +933,37 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();pal.style.display==='flex'?closePal():openPal();}if(e.key==='Escape'&&pal.style.display==='flex')closePal();});
 })();
 
-/* MOBILE HEADER: clock + active nav */
+/* MOBILE HEADER: full clock + active nav */
 (function(){
+  function tzStr(zone){const t=new Date(new Date().toLocaleString('en-US',{timeZone:zone}));return String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');}
   function updateMobClock(){
     const t=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
+    const h=t.getHours();
     const el=document.getElementById('mob-ist-time');
-    if(el)el.textContent=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+    if(el)el.textContent=String(h).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0')+':'+String(t.getSeconds()).padStart(2,'0');
+    const icon=document.getElementById('mob-clock-icon');
+    if(icon){if(h>=6&&h<9)icon.textContent='\u{1F305}';else if(h>=9&&h<18)icon.textContent='\u2600\uFE0F';else if(h>=18&&h<20)icon.textContent='\u{1F307}';else icon.textContent='\u{1F319}';}
+    const set=(id,zone)=>{const e=document.getElementById(id);if(e)e.textContent=tzStr(zone)};
+    set('mcp-ist','Asia/Kolkata');set('mcp-lon','Europe/London');set('mcp-nyc','America/New_York');set('mcp-dxb','Asia/Dubai');set('mcp-sgp','Asia/Singapore');set('mcp-can','America/Toronto');
   }
   updateMobClock();setInterval(updateMobClock,1000);
+  let mobClockOpen=false;
+  window.toggleMobClockPanel=function(){
+    mobClockOpen=!mobClockOpen;
+    const panel=document.getElementById('mobClockPanel');
+    const chev=document.getElementById('mobClockChevron');
+    if(panel)panel.classList.toggle('open',mobClockOpen);
+    if(chev)chev.classList.toggle('open',mobClockOpen);
+  };
+  document.addEventListener('click',function(e){
+    const wrap=document.getElementById('mobClockWrap');
+    if(wrap&&!wrap.contains(e.target)&&mobClockOpen){
+      mobClockOpen=false;
+      const p=document.getElementById('mobClockPanel');const c=document.getElementById('mobClockChevron');
+      if(p)p.classList.remove('open');if(c)c.classList.remove('open');
+    }
+  });
+  /* active nav */
   const items=document.querySelectorAll('.mob-r1-item');
   const sections=['hero','about','skills','work','experience','freelance'];
   const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){items.forEach(i=>i.classList.remove('active'));const m=document.querySelector('.mob-r1-item[data-msec="'+e.target.id+'"]');if(m)m.classList.add('active');}});},{threshold:0.4});
