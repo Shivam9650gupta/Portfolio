@@ -316,7 +316,7 @@ body::after{content:'';position:fixed;inset:0;opacity:.018;pointer-events:none;z
 .mob-row2-logo{font-size:1rem;font-weight:800;color:var(--text);white-space:nowrap;justify-self:start;}.mob-row2-logo span{color:var(--blue)}
 .mob-theme-btn{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:5px 9px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-self:end;}
 /* mob clock panel — fixed so it escapes any overflow clipping */
-#mobClockWrap{position:static!important;transform:none!important;}
+#mobClockWrap{position:static!important;transform:none!important;display:flex;justify-content:center;}
 #mobClockPanel{position:fixed!important;top:130px!important;left:12px!important;right:12px!important;transform:none!important;min-width:unset!important;max-width:calc(100vw - 24px);z-index:10000;}
 .mob-row3{overflow:hidden;background:var(--bg2);border-bottom:1px solid var(--border);padding:7px 0;position:relative;}
 .mob-row3::before,.mob-row3::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:2;}
@@ -339,14 +339,14 @@ body::after{content:'';position:fixed;inset:0;opacity:.018;pointer-events:none;z
   <!-- Row 2: logo · clock · theme -->
   <div class="mob-row2">
     <div class="mob-row2-logo">Shivam<span>Gupta</span></div>
-    <div class="nav-clock-wrap" id="mobClockWrap" style="position:static;transform:none;display:flex;justify-content:center;">
-      <div class="nav-clock" id="mobNavClock" onclick="toggleMobClockPanel()" title="Click for world times">
-        <span id="mob-clock-icon" style="font-size:0.85rem;line-height:1">&#127769;</span>
-        <span id="mob-ist-time">--:--:--</span>
-        <span class="nav-clock-label">IST</span>
-        <span class="nav-clock-chevron" id="mobClockChevron">&#9662;</span>
+    <div id="mobClockWrap" style="display:flex;justify-content:center;">
+      <div id="mobNavClock" onclick="toggleMobClockPanel()" style="display:inline-flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:4px 11px;cursor:pointer;user-select:none;">
+        <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:hb 2s infinite;display:inline-block;"></span>
+        <span id="mob-ist-time" style="font-size:0.72rem;font-weight:700;color:var(--text);font-family:'Courier New',monospace;letter-spacing:.02em;">--:--:--</span>
+        <span style="font-size:0.6rem;font-weight:600;color:var(--muted);">IST</span>
+        <span id="mobClockChevron" style="font-size:0.55rem;color:var(--muted);transition:transform .2s;">&#9662;</span>
       </div>
-      <div class="clock-panel" id="mobClockPanel" style="top:calc(100% + 4px);left:0;transform:none;right:0;min-width:unset;">
+      <div class="clock-panel" id="mobClockPanel">
         <div class="cp-title">World Clocks</div>
         <div class="cp-row"><span class="cp-city">&#127470;&#127475; New Delhi</span><span class="cp-time" id="mcp-ist">--:--</span><span class="cp-tz">IST UTC+5:30</span></div>
         <div class="cp-row"><span class="cp-city">&#127468;&#127463; London</span><span class="cp-time" id="mcp-lon">--:--</span><span class="cp-tz">BST</span></div>
