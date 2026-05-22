@@ -301,12 +301,84 @@ body::after{content:'';position:fixed;inset:0;opacity:.018;pointer-events:none;z
 @media(max-width:640px){.testi-swipe-hint{display:block}}
 .btn-magnetic{transition:transform .2s cubic-bezier(.23,1,.32,1),box-shadow .2s}
 .cursor-dot{position:fixed;width:6px;height:6px;border-radius:50%;background:var(--blue);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);opacity:0;transition:opacity .3s;}
-@media(max-width:640px){#status-widget{display:none}#mobile-nav{display:block}body{padding-bottom:80px}#back-top{bottom:90px}.top-marquee{display:none}}
+@media(max-width:640px){#status-widget{display:none}#mobile-nav{display:none}body{padding-top:130px;padding-bottom:20px}#back-top{bottom:24px}}
 @media(max-width:900px){.hero-two-col,.fl-inner,.about-grid{grid-template-columns:1fr}.skills-outer{grid-template-columns:1fr}.footer-top{grid-template-columns:1fr 1fr}}
-@media(max-width:640px){nav{padding:0 12px;height:56px}.nav-clock-wrap{position:static;transform:none;flex:1;display:flex;justify-content:center}.nav-links{gap:2px}.nav-links a:not(.nav-cta){display:none}.nav-cta{padding:6px 12px!important;font-size:0.73rem!important}.theme-btn{padding:5px 8px;margin-left:2px}.nav-clock{padding:4px 10px;font-size:0.7rem;gap:4px;letter-spacing:0}.nav-clock-label{display:none}#nav-ist-time{font-size:0.7rem}.clock-panel{position:fixed;top:64px;left:50%;transform:translateX(-50%);min-width:260px;max-width:calc(100vw - 24px)}.cp-city{font-size:0.74rem;min-width:90px}.cp-time{font-size:0.78rem;min-width:36px}.cp-tz{font-size:0.58rem;min-width:56px}.section{padding:60px 5%}.edu-grid,.fl-srv-grid{grid-template-columns:1fr}.footer-top{grid-template-columns:1fr}}
+@media(max-width:640px){nav{display:none}.section{padding:60px 5%}.edu-grid,.fl-srv-grid{grid-template-columns:1fr}.footer-top{grid-template-columns:1fr}.clock-panel{position:fixed;top:130px;left:50%;transform:translateX(-50%);min-width:260px;max-width:calc(100vw - 24px);}}
+
+/* ── MOBILE 3-ROW HEADER ── */
+#mob-header{display:none;position:fixed;top:0;left:0;right:0;z-index:9999;flex-direction:column;}
+@media(max-width:640px){#mob-header{display:flex;}}
+.mob-row1{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;padding:6px 0;}
+.mob-r1-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;border-radius:8px;font-size:0.58rem;font-weight:700;color:var(--muted);text-decoration:none;text-transform:uppercase;letter-spacing:.06em;transition:color .15s;}
+.mob-r1-item:hover,.mob-r1-item.active{color:var(--blue)}
+.mob-r1-icon{font-size:1.05rem;line-height:1}
+.mob-row2{background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:6px 14px;height:42px;}
+.mob-row2-logo{font-size:0.95rem;font-weight:800;color:var(--text)}.mob-row2-logo span{color:var(--blue)}
+.mob-row2-clock{display:flex;align-items:center;gap:5px;font-size:0.72rem;font-weight:700;color:var(--text);background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:4px 10px;cursor:pointer;}
+.mob-row2-clock-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:hb 2s infinite}
+.mob-theme-btn{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:4px 8px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;}
+.mob-row3{overflow:hidden;background:var(--bg2);border-bottom:1px solid var(--border);padding:7px 0;position:relative;}
+.mob-row3::before,.mob-row3::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:2;}
+.mob-row3::before{left:0;background:linear-gradient(90deg,var(--bg2),transparent)}
+.mob-row3::after{right:0;background:linear-gradient(-90deg,var(--bg2),transparent)}
 </style>
 </head>
 <body>
+
+<!-- MOBILE 3-ROW HEADER -->
+<div id="mob-header">
+  <!-- Row 1: nav links -->
+  <div class="mob-row1">
+    <a href="#hero" class="mob-r1-item active" data-msec="hero"><span class="mob-r1-icon">&#127968;</span>Home</a>
+    <a href="#about" class="mob-r1-item" data-msec="about"><span class="mob-r1-icon">&#128100;</span>About</a>
+    <a href="#work" class="mob-r1-item" data-msec="work"><span class="mob-r1-icon">&#128188;</span>Work</a>
+    <a href="#experience" class="mob-r1-item" data-msec="experience"><span class="mob-r1-icon">&#128197;</span>Exp</a>
+    <a href="#freelance" class="mob-r1-item" data-msec="freelance"><span class="mob-r1-icon">&#9993;&#65039;</span>Contact</a>
+  </div>
+  <!-- Row 2: logo · clock · theme -->
+  <div class="mob-row2">
+    <div class="mob-row2-logo">Shivam<span>Gupta</span></div>
+    <div class="mob-row2-clock" onclick="toggleClockPanel()">
+      <span class="mob-row2-clock-dot"></span>
+      <span id="mob-ist-time">--:--</span>
+      <span style="font-size:0.6rem;color:var(--muted)">IST</span>
+    </div>
+    <button class="mob-theme-btn" onclick="toggleTheme()"><span class="sun">&#9728;&#65039;</span><span class="moon">&#127769;</span></button>
+  </div>
+  <!-- Row 3: marquee -->
+  <div class="mob-row3"><div class="mtrack">
+    <span class="mi mizo"><span class="d"></span>Zoho CRM</span><span class="msep">·</span>
+    <span class="mi miz"><span class="d"></span>Zapier</span><span class="msep">·</span>
+    <span class="mi min"><span class="d"></span>n8n</span><span class="msep">·</span>
+    <span class="mi mi-sql"><span class="d"></span>SQL</span><span class="msep">·</span>
+    <span class="mi mi-bi"><span class="d"></span>Power BI</span><span class="msep">·</span>
+    <span class="mi miz"><span class="d"></span>Slack</span><span class="msep">·</span>
+    <span class="mi mi-jira"><span class="d"></span>Jira</span><span class="msep">·</span>
+    <span class="mi mi-notion"><span class="d"></span>Notion</span><span class="msep">·</span>
+    <span class="mi mi-aws"><span class="d"></span>AWS</span><span class="msep">·</span>
+    <span class="mi mi-mongo"><span class="d"></span>MongoDB</span><span class="msep">·</span>
+    <span class="mi mi-gs"><span class="d"></span>Apps Script</span><span class="msep">·</span>
+    <span class="mi mi-xl"><span class="d"></span>Excel</span><span class="msep">·</span>
+    <span class="mi mizo"><span class="d"></span>Zoho Flow</span><span class="msep">·</span>
+    <span class="mi mi-wh"><span class="d"></span>Webhooks</span><span class="msep">·</span>
+    <span class="mi mi-api"><span class="d"></span>REST APIs</span><span class="msep">·</span>
+    <span class="mi mizo"><span class="d"></span>Zoho CRM</span><span class="msep">·</span>
+    <span class="mi miz"><span class="d"></span>Zapier</span><span class="msep">·</span>
+    <span class="mi min"><span class="d"></span>n8n</span><span class="msep">·</span>
+    <span class="mi mi-sql"><span class="d"></span>SQL</span><span class="msep">·</span>
+    <span class="mi mi-bi"><span class="d"></span>Power BI</span><span class="msep">·</span>
+    <span class="mi miz"><span class="d"></span>Slack</span><span class="msep">·</span>
+    <span class="mi mi-jira"><span class="d"></span>Jira</span><span class="msep">·</span>
+    <span class="mi mi-notion"><span class="d"></span>Notion</span><span class="msep">·</span>
+    <span class="mi mi-aws"><span class="d"></span>AWS</span><span class="msep">·</span>
+    <span class="mi mi-mongo"><span class="d"></span>MongoDB</span><span class="msep">·</span>
+    <span class="mi mi-gs"><span class="d"></span>Apps Script</span><span class="msep">·</span>
+    <span class="mi mi-xl"><span class="d"></span>Excel</span><span class="msep">·</span>
+    <span class="mi mizo"><span class="d"></span>Zoho Flow</span><span class="msep">·</span>
+    <span class="mi mi-wh"><span class="d"></span>Webhooks</span><span class="msep">·</span>
+    <span class="mi mi-api"><span class="d"></span>REST APIs</span><span class="msep">·</span>
+  </div></div>
+</div>
 <!-- PAGE LOADER -->
 <div id="page-loader"><div class="pl-name" id="pl-name">Shivam<span>Gupta</span></div><div class="pl-bar"><div class="pl-bar-fill" id="pl-fill"></div></div></div>
 <!-- STATUS WIDGET (small animated green dot, bottom left — keep) -->
@@ -847,6 +919,21 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   document.getElementById('cmd-input').addEventListener('input',e=>renderResults(e.target.value));
   pal.addEventListener('click',e=>{if(e.target===pal)closePal();});
   document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();pal.style.display==='flex'?closePal():openPal();}if(e.key==='Escape'&&pal.style.display==='flex')closePal();});
+})();
+
+/* MOBILE HEADER: clock + active nav */
+(function(){
+  function updateMobClock(){
+    const t=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
+    const el=document.getElementById('mob-ist-time');
+    if(el)el.textContent=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+  }
+  updateMobClock();setInterval(updateMobClock,1000);
+  const items=document.querySelectorAll('.mob-r1-item');
+  const sections=['hero','about','skills','work','experience','freelance'];
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){items.forEach(i=>i.classList.remove('active'));const m=document.querySelector('.mob-r1-item[data-msec="'+e.target.id+'"]');if(m)m.classList.add('active');}});},{threshold:0.4});
+  sections.forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el)});
+  items.forEach(a=>{a.addEventListener('click',ev=>{ev.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});});});
 })();
 </script>
 </body>
